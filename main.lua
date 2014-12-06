@@ -14,6 +14,10 @@ require("gui")
 
 require("world")
 
+require("card")
+
+cardSpecs = require("assets/cardspecs")
+
 require("entity")
 require("snowman")
 require("wall")

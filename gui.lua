@@ -1,5 +1,8 @@
 -- #LD31 - 2014 by <weldale@gmail.com>
 
+local upArrowGraphics = love.graphics.newImage("assets/up-arrow.png")
+local downArrowGraphics = love.graphics.newImage("assets/down-arrow.png")
+
 local Window = class("Window")
 
 function Window:initialize(w, h, x, y)
@@ -26,6 +29,14 @@ function Window:getByLabel(label)
   return self.children[label]
 end
 
+function Window:keypressed(key)
+  for i,child in pairs(self.children) do
+    if child.keypressed then
+      child:keypressed(key)
+    end
+  end
+end
+
 function Window:draw(tx, ty)
   tx = tx or 0
   ty = ty or 0
@@ -34,6 +45,7 @@ function Window:draw(tx, ty)
   love.graphics.translate( self.x, self.y )
 
   for i,child in pairs(self.children) do
+    love.graphics.setColor(255,255,255,255)
     child:draw(tx + self.x, ty + self.y)
   end
   
@@ -99,8 +111,68 @@ function CardWidget:initialize(x, y, cardspec)
   self.selected = false
 end
 
-function CardWidget:draw()
+function CardWidget:draw(ox, oy)
+  love.graphics.draw(self.cardspec.img)
+end
+
+local CardView = class("CardView")
+
+function CardView:initialize(x, y, w, h)
+  self.x = x
+  self.y = y
+  self.w = w
+  self.h = h
+  self.numCards = math.floor(self.h / 55)
+  self.offset = 1
+end
+
+function CardView:draw(ox, oy)
+  local startIdx = self.offset
+  local endIdx = math.min( startIdx + self.numCards, #(state.cards) )
   
+  love.graphics.push()
+  love.graphics.translate( 10, 5 )
+
+  for i = startIdx, endIdx do
+    local c = state.cards[i]
+    love.graphics.setColor( 255, 255, 255, 255 )
+    love.graphics.rectangle("fill", 0, 0, self.w - 30, 45)
+    
+    love.graphics.setColor( 0, 0, 0, 255 )
+    love.graphics.rectangle("line", 0, 0, 45, 45)
+    love.graphics.draw( c.cardSpec.img, 0, 0 )
+
+    love.graphics.print( c.cardSpec.name, 55, 15 )
+
+    love.graphics.translate( 0, 50 ) 
+  end
+
+  love.graphics.pop()
+
+  if self.offset > 1 then
+    love.graphics.setColor( 255, 255, 255, 255 )
+    love.graphics.draw( upArrowGraphics, 145, 5 ) 
+  end
+  if self.offset + self.numCards < #state.cards then
+    love.graphics.setColor( 255, 255, 255, 255 )
+    love.graphics.draw( downArrowGraphics, 145, self.h - 18 ) 
+  end
+
+end
+
+function CardView:keypressed(key)
+  if key == keyconfig.player.cardsDown then
+    self.offset = self.offset + 1
+    if self.offset > #state.cards then
+      self.offset = #state.cards
+    end
+  elseif key == keyconfig.player.cardsUp then
+    self.offset = self.offset - 1
+    if self.offset == 0 then
+      self.offset = 1
+    end
+  end
+
 end
 
 Gui = class("Gui")
@@ -115,9 +187,22 @@ function Gui:initialize()
   ballParsWindow:addChildren( Label:new( 60, 5, function() return math.floor(state.snowman.weapons[1].pars.speed / 100) end, "ballSpeedLabel" ) )
   ballParsWindow:addChildren( Label:new( 20, 25, function() return state.snowman.weapons[1].pars.lifeTime end, "ballLifeTimeLabel" ) )
   ballParsWindow:addChildren( Label:new( 60, 25, function() return state.snowman.weapons[1].pars.reload end, "ballReloadLabel" ) )
+
+  local cardViewWindow = self.window:addChildren( Window:new( 160, 305, 0, 50 ), "cardView" )
+  cardViewWindow.border = true
+
+  cardViewWindow:addChildren( CardView:new(0, 0, 160, 305) )
+
 end
 
 function Gui:draw()
   self.window:draw() 
+end
+
+function Gui:keypressed(key)
+  self.window:keypressed(key)
+end
+
+function Gui:keyreleased(key)
 end
 

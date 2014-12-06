@@ -9,6 +9,8 @@ return {
     sup = 'up',
     sdown = 'down',
     sleft = 'left',
-    sright = 'right'
+    sright = 'right',
+    cardsUp = ']',
+    cardsDown = '['
   }
 }

@@ -2,9 +2,11 @@
 
 CardSpec = class("CardSpec")
 
-function CardSpec:initialize( name, category, desc, initPars )
+function CardSpec:initialize( name, category, desc, img, initPars )
+  initPars = initPars or {}
   self.name = name
   self.category = category
+  self.img = img
   self.desc = desc or "A random thing"
   self.prob = initPars.prob or 100
   self.effectTime = initPars.effectTime or "room"
@@ -22,12 +24,11 @@ end
 function CardSpec:onRoomExit(state)
 end
 
-local cardSpecs, cardImages = require("assets/cardspecs")
 
 Card = class("Card")
 
-function Card:initialize(cardSpec)
-  self.cardSpec = cardSpec
+function Card:initialize(cardSpecName)
+  self.cardSpec = cardSpecs[cardSpecName]
 end
 
 

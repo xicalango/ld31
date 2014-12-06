@@ -16,6 +16,19 @@ function InGameState:initialize()
 
   self.testMob = Mob:new( 160, 160, "tower" )
   self.world:addEntity( self.testMob )
+
+  self.cards = { 
+    Card:new("king"),
+    Card:new("king"),
+    Card:new("king"),
+    Card:new("king"),
+    Card:new("king"),
+    Card:new("king"),
+    Card:new("king"),
+    Card:new("king"),
+    Card:new("king"),
+    Card:new("king")
+  }
 end
 
 function InGameState:onActivation()
@@ -40,6 +53,7 @@ end
 
 function InGameState:keypressed(key)
   self.snowman:keypressed(key)
+  self.gui:keypressed(key)
 end
 
 function InGameState:keyreleased(key)
