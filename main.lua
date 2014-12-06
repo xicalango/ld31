@@ -27,7 +27,12 @@ require("mob")
 require("state_ingame")
 
 debug = {
-  drawHitboxes = true
+  drawHitboxes = false
+}
+
+global = {
+  takeScreenshot = false,
+  fullscreen = false
 }
 
 function love.load()
@@ -39,6 +44,12 @@ end
 
 function love.draw()
   gameStateManager:draw()
+
+  if global.takeScreenshot then
+    local screenshot = love.graphics.newScreenshot()
+		screenshot:encode( "ld31_" .. love.timer.getTime() .. ".png" )
+    global.takeScreenshot = false
+  end
 end
 
 function love.update(dt)
@@ -46,6 +57,16 @@ function love.update(dt)
 end
 
 function love.keypressed(key)
+  if key == "f12" then
+    global.takeScreenshot = true
+    elseif key == "f5" then
+      if love.window.setFullscreen(not global.fullscreen, "desktop") then
+      global.fullscreen = not global.fullscreen
+    end
+  elseif key == "escape" then
+    love.event.push('quit')
+  end
+
   gameStateManager:keypressed(key)
 end
 

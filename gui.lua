@@ -140,7 +140,7 @@ function CardView:draw(ox, oy)
     
     love.graphics.setColor( 0, 0, 0, 255 )
     love.graphics.rectangle("line", 0, 0, 45, 45)
-    love.graphics.draw( c.cardSpec.img, 0, 0 )
+    love.graphics.draw( c.cardSpec.img, 2, 2 )
 
     love.graphics.print( c.cardSpec.name, 55, 15 )
 

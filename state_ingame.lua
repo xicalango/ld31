@@ -20,7 +20,7 @@ function InGameState:initialize()
   self.cards = { 
     Card:new("king"),
     Card:new("king"),
-    Card:new("king"),
+    Card:new("pawn"),
     Card:new("king"),
     Card:new("king"),
     Card:new("king"),
