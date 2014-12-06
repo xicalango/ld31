@@ -19,13 +19,15 @@ function Entity:initialize(x, y)
 
   self.isWall = false
   self.isShot = false
+
+  self.hitEffectTime = 0
 end
 
 function Entity:graphicOffsetToHitbox()
-  self.hitbox.left = self.graphics.offset[1]
-  self.hitbox.right = self.graphics.offset[1]
-  self.hitbox.top = self.graphics.offset[2]
-  self.hitbox.bottom = self.graphics.offset[2]
+  self.hitbox.left = self.graphics.offset[1] * self.graphics.scale[1]
+  self.hitbox.right = self.graphics.offset[1] * self.graphics.scale[1]
+  self.hitbox.top = self.graphics.offset[2] * self.graphics.scale[2]
+  self.hitbox.bottom = self.graphics.offset[2] * self.graphics.scale[2]
 end
 
 function Entity:update(dt)
@@ -38,7 +40,11 @@ function Entity:update(dt)
     local newY = self.y + (self.vy * self.speed * dt)
 
     local isObstacle, e = state:isObstacleFor( self, newX, newY )
-      
+    
+    if e == "boundaries" then
+      self:onCollideWith( e )
+    end
+
     if not isObstacle then -- this looks ugly as hell..
       self.x = newX
       self.y = newY
@@ -65,7 +71,9 @@ function Entity:update(dt)
 
   end
 
-  
+ if self.hitEffectTime >= 0 then
+  self.hitEffectTime = self.hitEffectTime - dt
+ end
 
 end
 
@@ -94,7 +102,11 @@ function Entity:onCollideWith( obj )
 end
 
 function Entity:onHit(shot)
-  self.remove = true
+  self.hitEffectTime = .5  
+end
+
+function Entity:die()
+  self.remove=true
 end
 
 function Entity:draw()
@@ -106,7 +118,12 @@ function Entity:draw()
   end
   
   if self.graphics then
+    local oldTint = self.graphics.tint
+    if self.hitEffectTime >= 0 then
+      self.graphics.tint[1] = 255 * (self.hitEffectTime / .5)
+    end
     self.graphics:draw(self.x, self.y)
+    self.graphics.tint = oldTint
   end
 
 end

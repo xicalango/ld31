@@ -1,3 +1,4 @@
+-- #LD31 - 2014 by <weldale@gmail.com>
 -- Paddle Game - #LD30 -- by <weldale@gmail.com>
 -- Original: Rocks-n-Blaster -- #LD48 -- by <weldale@gmail.com> https://github.com/xicalango/Rocks-n-Blaster
 
@@ -7,6 +8,7 @@ function AbstractGraphics:initialize( )
 	self.offset = {0, 0}
 	self.scale = {1, 1}
 	self.rotation = 0
+  self.tint = {255, 255, 255, 255}
 end
 
 function AbstractGraphics:draw(x, y)
@@ -25,11 +27,17 @@ Graphics = AbstractGraphics:subclass("Graphics")
 function Graphics:initialize(file)
 	AbstractGraphics.initialize(self)
 
-	self.graphics = love.graphics.newImage(file)
+  if type(file) == "string" then
+  	self.graphics = love.graphics.newImage(file)
+  else
+    self.graphics = file
+  end
 end 
 
 function Graphics:_draw(x, y, ox, oy, r, sx, sy)
-	love.graphics.draw( self.graphics, x, y, r, sx, sy, ox, oy)
+  withColor(self.tint, function()
+  	love.graphics.draw( self.graphics, x, y, r, sx, sy, ox, oy)
+  end)
 end
 
 TextGraphics = AbstractGraphics:subclass("TextGraphics")
@@ -40,7 +48,7 @@ function TextGraphics:initialize(text)
 end
 
 function TextGraphics:_draw(x, y, ox, oy, r, sx, sy)
-	utils.withColor({255,255,255,255}, function()
+	utils.withColor(self.tint, function()
 		love.graphics.print( self.text, x, y, r, sx, sy, ox, oy ) 
 	end)
 end

@@ -1,33 +1,42 @@
 -- #LD31 - 2014 by <weldale@gmail.com>
 
 local graphics = {
-  king = {
-    graphics = Graphics:new("assets/mob_king.png"),
-    offset = {20, 20}
-  }
+  tower = love.graphics.newImage("assets/mob_tower.png"),
+  king = love.graphics.newImage("assets/mob_king.png"),
+  queen = love.graphics.newImage("assets/mob_queen.png"),
+  bishop = love.graphics.newImage("assets/mob_bishop.png"),
+  knight = love.graphics.newImage("assets/mob_knight.png"),
+  pawn = love.graphics.newImage("assets/mob_pawn.png"),
 }
 
-temp_mobspecs = {
-  king = {
-    name = "king",
-    speed = 100
-  }
-}
+local mobspecs = require("assets/mobspecs")
 
 Mob = Entity:subclass("Mob")
 
-function Mob:initialize(x, y, mobspec)
+function Mob:initialize(x, y, name)
   Entity.initialize( self, x, y )
-  self.mobspec = mobspec
+  self.mobspec = mobspecs[name]
 
-  self:initGraphics(mobspec.name)
+  self:initGraphics(self.mobspec.name)
 
-  self.speed = mobspec.speed
+  self.speed = self.mobspec.speed
+  self.health = self.mobspec.health
 end
 
 function Mob:initGraphics(name)
-  local graphicsTemp = graphics[name]
-  self.graphics = graphicsTemp.graphics
-  self.graphics.offset = graphicsTemp.offset
+  self.graphics = Graphics:new(graphics[name])
+  self.graphics.offset = {20,20}
   self:graphicOffsetToHitbox()
+  
+  self.graphics.tint = self.mobspec.defaultTint
 end
+
+function Mob:onHit(shot)
+  Entity.onHit(self, shot)
+  self.health = self.health - shot.pars.dmg
+
+  if self.health <= 0 then
+    self:die()
+  end
+end
+

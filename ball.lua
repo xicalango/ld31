@@ -23,13 +23,8 @@ function Ball:initialize(owner, x, y, vx, vy, pars)
   self.pars = pars
 
   self.graphics = ballGraphics
-  self.graphics.scale = {.5, .5}
-  self.graphics.offset = {20, 20}
 
-  self.hitbox.left = 10
-  self.hitbox.right = 10
-  self.hitbox.top = 10
-  self.hitbox.bottom = 10
+  self:initGraphicsAndHitbox()
 
   self.owner = owner
 
@@ -41,6 +36,12 @@ function Ball:initialize(owner, x, y, vx, vy, pars)
   self.lifeTime = pars.lifeTime
 
   self.isShot = true
+end
+
+function Ball:initGraphicsAndHitbox()
+  self.graphics.scale = {self.pars.size/2, self.pars.size/2}
+  self.graphics.offset = {20, 20}
+  self:graphicOffsetToHitbox()
 end
 
 function Ball:update(dt)
@@ -55,7 +56,7 @@ function Ball:update(dt)
 end
 
 function Ball:onCollideWith(e)
-  if e ~= self.owner then
+  if e ~= self.owner and not e.isShot then
     if type(e) == "table" then
       e:onHit(self)
     end

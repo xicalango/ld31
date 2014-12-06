@@ -14,7 +14,7 @@ function InGameState:initialize()
 
   self.gui = Gui:new()
 
-  self.testMob = Mob:new( 160, 160, temp_mobspecs["king"] )
+  self.testMob = Mob:new( 160, 160, "tower" )
   self.world:addEntity( self.testMob )
 end
 
