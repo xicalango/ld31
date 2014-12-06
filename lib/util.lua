@@ -16,6 +16,14 @@ function signum( x )
 	end
 end
 
+function vlenSq( x, y )
+	return (x * x) + (y * y)
+end
+
+function vlen( x, y )
+	return math.sqrt( vlenSq(x, y) )
+end
+
 function dstSq( x1, y1, x2, y2 )
 	local dx = x2-x1
 	local dy = y2-y1
@@ -45,4 +53,14 @@ end
 function randomDir()
 	dirs = {"up", "down", "left", "right"}
 	return dirs[love.math.random(1,4)]
+end
+
+function withColor(rgba, fn)
+
+	local currentColor = {love.graphics.getColor()}
+
+	love.graphics.setColor(rgba)
+	fn()
+	love.graphics.setColor(currentColor)
+
 end

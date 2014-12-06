@@ -11,10 +11,76 @@ function Entity:initialize(x, y)
   self.vx = 0
   self.vy = 0
 
+  self.speed = 200
+
+  self.hitbox = {left = 0, top = 0, right = 0, bottom = 0} 
+  
   self.remove = false
+
+  self.isWall = false
+end
+
+function Entity:graphicOffsetToHitbox()
+  self.hitbox.left = self.graphics.offset[1]
+  self.hitbox.right = self.graphics.offset[1]
+  self.hitbox.top = self.graphics.offset[2]
+  self.hitbox.bottom = self.graphics.offset[2]
 end
 
 function Entity:update(dt)
+
+  if vlen(self.vx, self.vy) > 0.01 then
+    
+    local oldX, oldY = self.x, self.y
+
+    local newX = self.x + (self.vx * self.speed * dt)
+    local newY = self.y + (self.vy * self.speed * dt)
+
+    local isObstacle, e = state:isObstacleFor( self, newX, newY )
+      
+    if not isObstacle then
+      self.x = newX
+      self.y = newY
+    else
+      self.onCollideWith(e)
+
+      if state:isObstacleFor( self, oldX, newY ) then
+
+        if not state:isObstacleFor( self, newX, oldY ) then
+          self.x = newX
+          self.y = oldY
+        end
+
+      else
+        self.x = oldX
+        self.y = newY
+      end
+    end
+
+  end
+
+end
+
+function Entity:getHitRectangle(ox, oy)
+  ox = ox or self.x
+  oy = oy or self.y
+  return 
+    ox - self.hitbox.left, 
+    oy - self.hitbox.top, 
+    ox + self.hitbox.right, 
+    oy + self.hitbox.bottom
+end
+
+function Entity:collidesWith(entity, ox, oy)
+  ox = ox or self.x
+  oy = oy or self.y
+  local sx1, sy1, sx2, sy2 = self:getHitRectangle(ox, oy)
+  local ox1, oy1, ox2, oy2 = entity:getHitRectangle()
+
+  return intersectRect( sx1, sy1, sx2, sy2, ox1, oy1, ox2, oy2 )
+end
+
+function Entity:onCollideWith( obj )
 end
 
 function Entity:draw()
