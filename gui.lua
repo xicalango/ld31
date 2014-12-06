@@ -135,7 +135,13 @@ function CardView:draw(ox, oy)
 
   for i = startIdx, endIdx do
     local c = state.cards[i]
-    love.graphics.setColor( 255, 255, 255, 255 )
+
+    if self.selectMode and i == self.selection then
+      love.graphics.setColor( 0, 255, 255, 255 )
+    else
+      love.graphics.setColor( 255, 255, 255, 255 )
+    end
+
     love.graphics.rectangle("fill", 0, 0, self.w - 30, 45)
     
     love.graphics.setColor( 0, 0, 0, 255 )
@@ -173,6 +179,40 @@ function CardView:keypressed(key)
     end
   end
 
+  if self.selectMode then
+    if key == keyconfig.player.up or key == keyconfig.player.sup then
+      self.selection = self.selection - 1
+      if self.selection <= 0 then
+        self.selection = #state.cards
+        self.offset = math.max(1, #state.cards - self.numCards)
+      end
+
+      if self.selection < self.offset then
+        self.offset = self.selection
+      end
+    elseif key == keyconfig.player.down or key == keyconfig.player.sdown then
+      self.selection = self.selection + 1
+
+      if self.selection > #state.cards then
+        self.selection = 1
+        self.offset = 1
+      end
+
+      if self.selection > self.offset + self.numCards then
+        self.offset = self.selection - self.numCards
+      end
+    end
+  end
+
+end
+
+function CardView:setSelectMode(mode, num)
+  self.selectMode = mode
+  self.num = num or 0
+
+  if self.selectMode == true then
+    self.selection = 1
+  end
 end
 
 Gui = class("Gui")

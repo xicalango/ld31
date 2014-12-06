@@ -46,7 +46,11 @@ function InGameState:update(dt)
     end
 
     self.roundState = InGameState.ROUND_BEGIN_PLAY
+    self.gui:setSelectMode(true, self.rules.playCards)
   elseif self.roundState == InGameState.ROUND_BEGIN_PLAY then
+    if #self.cards == 0 then
+      error("Paniq")
+    end
     
   elseif self.roundState == InGameState.ROUND_ROUND then
     self.world:update(dt)

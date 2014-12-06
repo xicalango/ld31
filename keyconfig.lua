@@ -11,6 +11,7 @@ return {
     sleft = 'left',
     sright = 'right',
     cardsUp = ']',
-    cardsDown = '['
+    cardsDown = '[',
+    select = 'enter'
   }
 }
