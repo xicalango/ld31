@@ -4,8 +4,8 @@
 
 AbstractGraphics = class("AbstractGraphics")
 
-function AbstractGraphics:initialize( )
-	self.offset = {0, 0}
+function AbstractGraphics:initialize(ox, oy)
+	self.offset = {ox or 0, oy or 0}
 	self.scale = {1, 1}
 	self.rotation = 0
   self.tint = {255, 255, 255, 255}
@@ -24,8 +24,8 @@ end
 
 Graphics = AbstractGraphics:subclass("Graphics")
 
-function Graphics:initialize(file)
-	AbstractGraphics.initialize(self)
+function Graphics:initialize(file, ox, oy)
+	AbstractGraphics.initialize(self, ox, oy)
 
   if type(file) == "string" then
   	self.graphics = love.graphics.newImage(file)

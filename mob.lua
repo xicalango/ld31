@@ -24,8 +24,7 @@ function Mob:initialize(x, y, name)
 end
 
 function Mob:initGraphics(name)
-  self.graphics = Graphics:new(graphics[name])
-  self.graphics.offset = {20,20}
+  self.graphics = Graphics:new(graphics[name], 20, 20)
   self:graphicOffsetToHitbox()
   
   self.graphics.tint = self.mobspec.defaultTint

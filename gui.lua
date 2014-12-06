@@ -26,13 +26,15 @@ function Window:getByLabel(label)
   return self.children[label]
 end
 
-function Window:draw()
+function Window:draw(tx, ty)
+  tx = tx or 0
+  ty = ty or 0
   love.graphics.push()
 
   love.graphics.translate( self.x, self.y )
 
   for i,child in pairs(self.children) do
-    child:draw()
+    child:draw(tx + self.x, ty + self.y)
   end
   
   if self.border then
@@ -42,6 +44,14 @@ function Window:draw()
   end
 
   love.graphics.pop()
+end
+
+function Window:mousepressed(x, y, button)
+  for i,child in pairs(self.children) do
+    if child.mousepressed then
+      child:mousepressed( x - self.x, y - self.y, button )
+    end
+  end
 end
 
 local Icon = class("Icon")
@@ -80,6 +90,19 @@ function Label:draw()
   love.graphics.print( self.textFn(), self.x, self.y )
 end
 
+local CardWidget = class("CardWidget")
+
+function CardWidget:initialize(x, y, cardspec)
+  self.x = x
+  self.y = y
+  self.cardspec = cardspec
+  self.selected = false
+end
+
+function CardWidget:draw()
+  
+end
+
 Gui = class("Gui")
 
 function Gui:initialize()
@@ -88,10 +111,10 @@ function Gui:initialize()
   local ballParsWindow = self.window:addChildren( Window:new( 160, 50 ), "ballPars" )
 
   ballParsWindow:addChildren( Icon:new(5, 5, "assets/crossed_swords.png") )
-  ballParsWindow:addChildren( Label:new( 20, 5, function() return state.snowman.ballpars.dmg end, "ballPowerLabel" ) )
-  ballParsWindow:addChildren( Label:new( 60, 5, function() return math.floor(state.snowman.ballpars.speed / 100) end, "ballSpeedLabel" ) )
-  ballParsWindow:addChildren( Label:new( 20, 25, function() return state.snowman.ballpars.lifeTime end, "ballLifeTimeLabel" ) )
-  ballParsWindow:addChildren( Label:new( 60, 25, function() return state.snowman.ballpars.reload end, "ballReloadLabel" ) )
+  ballParsWindow:addChildren( Label:new( 20, 5, function() return state.snowman.weapons[1].pars.dmg end, "ballPowerLabel" ) )
+  ballParsWindow:addChildren( Label:new( 60, 5, function() return math.floor(state.snowman.weapons[1].pars.speed / 100) end, "ballSpeedLabel" ) )
+  ballParsWindow:addChildren( Label:new( 20, 25, function() return state.snowman.weapons[1].pars.lifeTime end, "ballLifeTimeLabel" ) )
+  ballParsWindow:addChildren( Label:new( 60, 25, function() return state.snowman.weapons[1].pars.reload end, "ballReloadLabel" ) )
 end
 
 function Gui:draw()

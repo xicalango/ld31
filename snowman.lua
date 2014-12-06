@@ -14,23 +14,28 @@ function Snowman:initialize(x, y)
   self.shoot = {left = false, right = false, up = false, down = false}
 
   self.shooting = nil
-  self.reloadTimer = 0
-  self.ballpars = BallParameters:new()
+  self.weapons = { 
+    { reloadTimer = 0, pars = BallParameters:new()} 
+  }
 end
 
 function Snowman:update(dt)
   Entity.update(self, dt)
 
   if self.shooting then
-    if self.reloadTimer <= 0 then
-      local sx, sy = dirToCart( self.shooting )
-      state:shoot( self, self.ballpars, sx, sy )
-      self.reloadTimer = self.ballpars.reload
+    for i,w in ipairs(self.weapons) do
+      if w.reloadTimer <= 0 then
+        local sx, sy = dirToCart( self.shooting )
+        state:shoot( self, w.pars, sx, sy )
+        w.reloadTimer = w.pars.reload
+      end
     end
   end
 
-  if self.reloadTimer > 0 then
-    self.reloadTimer = self.reloadTimer - dt
+  for i,w in ipairs(self.weapons) do
+    if w.reloadTimer > 0 then
+      w.reloadTimer = w.reloadTimer - dt
+    end
   end
 end
 
