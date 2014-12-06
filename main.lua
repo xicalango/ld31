@@ -15,6 +15,7 @@ require("world")
 require("entity")
 require("snowman")
 require("wall")
+require("ball")
 
 require("state_ingame")
 

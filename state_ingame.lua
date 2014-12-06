@@ -43,7 +43,7 @@ end
 function InGameState:isObstacleFor( entity, x, y )
 
   local ex1, ey1, ex2, ey2 = entity:getHitRectangle( x, y ) 
-  if not intersectRect( ex1, ey1, ex2, ey2, 40, 40, 440, 440 ) then
+  if not intersectRect( ex1, ey1, ex2, ey2, 0, 0, 480, 480 ) then
     return true, "boundaries"
   end
 
@@ -51,11 +51,15 @@ function InGameState:isObstacleFor( entity, x, y )
     if e ~= entity then -- don't collide with self
 
      if entity:collidesWith( e, x, y ) then
-      return true, e
+      return e:blocks(entity), e
      end
 
     end
   end
   
   return false
+end
+
+function InGameState:shoot( e, pars, sx, sy )
+  self.world:addEntity( Ball:new( e, e.x, e.y, sx, sy, pars, pars ) )
 end

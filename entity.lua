@@ -42,7 +42,7 @@ function Entity:update(dt)
       self.x = newX
       self.y = newY
     else
-      self.onCollideWith(e)
+      self:onCollideWith(e)
 
       if state:isObstacleFor( self, oldX, newY ) then
 
@@ -78,6 +78,10 @@ function Entity:collidesWith(entity, ox, oy)
   local ox1, oy1, ox2, oy2 = entity:getHitRectangle()
 
   return intersectRect( sx1, sy1, sx2, sy2, ox1, oy1, ox2, oy2 )
+end
+
+function Entity:blocks(e)
+  return self.isWall
 end
 
 function Entity:onCollideWith( obj )

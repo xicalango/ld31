@@ -5,6 +5,10 @@ return {
     up = 'w',
     down = 's',
     left = 'a',
-    right = 'd'
+    right = 'd',
+    sup = 'up',
+    sdown = 'down',
+    sleft = 'left',
+    sright = 'right'
   }
 }
