@@ -18,6 +18,7 @@ function Entity:initialize(x, y)
   self.remove = false
 
   self.isWall = false
+  self.isShot = false
 end
 
 function Entity:graphicOffsetToHitbox()
@@ -38,12 +39,10 @@ function Entity:update(dt)
 
     local isObstacle, e = state:isObstacleFor( self, newX, newY )
       
-    if not isObstacle then
+    if not isObstacle then -- this looks ugly as hell..
       self.x = newX
       self.y = newY
     else
-      self:onCollideWith(e)
-
       if state:isObstacleFor( self, oldX, newY ) then
 
         if not state:isObstacleFor( self, newX, oldY ) then
@@ -57,7 +56,16 @@ function Entity:update(dt)
       end
     end
 
+    local hitting = state:hitsEntityOn( self )
+
+    if hitting then
+      self:onCollideWith( hitting )
+    end
+
+
   end
+
+  
 
 end
 
@@ -72,8 +80,6 @@ function Entity:getHitRectangle(ox, oy)
 end
 
 function Entity:collidesWith(entity, ox, oy)
-  ox = ox or self.x
-  oy = oy or self.y
   local sx1, sy1, sx2, sy2 = self:getHitRectangle(ox, oy)
   local ox1, oy1, ox2, oy2 = entity:getHitRectangle()
 
@@ -87,9 +93,21 @@ end
 function Entity:onCollideWith( obj )
 end
 
+function Entity:onHit(shot)
+  self.remove = true
+end
+
 function Entity:draw()
+  if debug.drawHitboxes then
+    local x1, y1, x2, y2 = self:getHitRectangle()
+    withColor( {255, 0, 0}, function()
+      love.graphics.rectangle( "fill", x1, y1, x2-x1, y2-y1 )
+    end)
+  end
+  
   if self.graphics then
     self.graphics:draw(self.x, self.y)
   end
+
 end
 

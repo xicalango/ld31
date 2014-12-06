@@ -10,14 +10,21 @@ keyconfig = require("keyconfig")
 
 require("camera")
 
+require("gui")
+
 require("world")
 
 require("entity")
 require("snowman")
 require("wall")
 require("ball")
+require("mob")
 
 require("state_ingame")
+
+debug = {
+  drawHitboxes = true
+}
 
 function love.load()
   gameStateManager = GameStateManager:new()

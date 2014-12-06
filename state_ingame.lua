@@ -11,6 +11,11 @@ function InGameState:initialize()
 
   self.world = World:new()
   self.world:addEntity( self.snowman )
+
+  self.gui = Gui:new()
+
+  self.testMob = Mob:new( 160, 160, temp_mobspecs["king"] )
+  self.world:addEntity( self.testMob )
 end
 
 function InGameState:onActivation()
@@ -23,6 +28,7 @@ end
 
 function InGameState:draw()
   self.camera:draw( self.viewport, self.world )
+  self.gui:draw()
 end
 
 function InGameState:mousepressed(x, y, button)
@@ -43,7 +49,7 @@ end
 function InGameState:isObstacleFor( entity, x, y )
 
   local ex1, ey1, ex2, ey2 = entity:getHitRectangle( x, y ) 
-  if not intersectRect( ex1, ey1, ex2, ey2, 0, 0, 480, 480 ) then
+  if ex1 < 0 or ex2 > 480 or ey1 < 0 or ey2 > 480 then
     return true, "boundaries"
   end
 
@@ -58,6 +64,17 @@ function InGameState:isObstacleFor( entity, x, y )
   end
   
   return false
+end
+
+function InGameState:hitsEntityOn( entity, x, y )
+  for i,e in ipairs(self.world.entities) do
+    if e ~= entity then
+      if entity:collidesWith( e, x, y ) then
+        return e
+      end
+    end
+  end
+  return nil
 end
 
 function InGameState:shoot( e, pars, sx, sy )
