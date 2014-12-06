@@ -8,7 +8,7 @@ function CardSpec:initialize( name, category, desc, img, initPars )
   self.category = category
   self.img = img
   self.desc = desc or "A random thingy thing"
-  self.prob = initPars.prob or 100
+  self.count = initPars.count or 10
   self.effectTime = initPars.effectTime or "room"
 end
 
@@ -21,10 +21,10 @@ end
 function CardSpec:onDeactivation(card, state)
 end
 
-function CardSpec:onRoomEnter(card, state)
+function CardSpec:onRoundEnter(card, state)
 end
 
-function CardSpec:onRoomExit(card, state)
+function CardSpec:onRoundExit(card, state)
 end
 
 function CardSpec:checkGoalCondition(card, state)
@@ -34,6 +34,7 @@ end
 Card = class("Card")
 
 function Card:initialize(cardSpecName)
+  self.name = cardSpecName
   self.cardSpec = cardSpecs[cardSpecName]
   self.cardSpec:setup(self, state)
 end
@@ -46,12 +47,12 @@ function Card:onDeactivation()
   self.cardSpec:onDeactivation(self, state)
 end
 
-function Card:onRoomEnter()
-  self.cardSpec:onRoomEnter(self, state)
+function Card:onRoundEnter()
+  self.cardSpec:onRoundEnter(self, state)
 end
 
-function Card:onRoomExit()
-  self.cardSpec:onRoomExit(self, state)
+function Card:onRoundExit()
+  self.cardSpec:onRoundExit(self, state)
 end
 
 function Card:checkGoalCondition(card, state)

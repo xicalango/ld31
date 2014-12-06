@@ -2,41 +2,60 @@
 
 InGameState = GameState:subclass("InGameState")
 
+InGameState.ROUND_BEGIN_DRAW = "begin_draw"
+InGameState.ROUND_BEGIN_PLAY = "begin_play"
+InGameState.ROUND_ROUND = "round" -- candidate for best line
+InGameState.ROUND_END = "end"
+
 function InGameState:initialize()
   self.camera = Camera:new(0, 0, 480, 480)
   self.camera.bgColor = {255, 255, 255}
   self.viewport = Viewport:new(160, 0, 480, 480)
-
-  self.snowman = Snowman:new( 240, 240 )
-
-  self.world = World:new()
-  self.world:addEntity( self.snowman )
-
   self.gui = Gui:new()
-
-  self.testMob = Mob:new( 160, 160, "tower" )
-  self.world:addEntity( self.testMob )
-
-  self.cards = { 
-    Card:new("king"),
-    Card:new("king"),
-    Card:new("pawn"),
-    Card:new("king"),
-    Card:new("king"),
-    Card:new("king"),
-    Card:new("king"),
-    Card:new("king"),
-    Card:new("king"),
-    Card:new("king")
-  }
+  self:reset()
 end
 
 function InGameState:onActivation()
   state = self
+
+
+  self:reset()
+end
+
+function InGameState:reset()
+  self.snowman = Snowman:new( 240, 240 )
+
+  self.world = World:new()
+  self.world:addEntity( self.snowman )
+  
+  self.deck = CardDeck:new()
+  self.cards = self.deck:drawCards(2)
+
+  self.rules = Rules:new()
+
+  self.roundState = InGameState.ROUND_BEGIN_DRAW
 end
 
 function InGameState:update(dt)
-  self.world:update(dt)
+
+  if self.roundState == InGameState.ROUND_BEGIN_DRAW then
+    local newCards = self.deck:drawCards( self.rules.drawCards )
+
+    for _,v in ipairs(newCards) do
+      table.insert( self.cards, v)
+    end
+
+    self.roundState = InGameState.ROUND_BEGIN_PLAY
+  elseif self.roundState == InGameState.ROUND_BEGIN_PLAY then
+    
+  elseif self.roundState == InGameState.ROUND_ROUND then
+    self.world:update(dt)
+
+  elseif self.roundState == InGameState.ROUND_END then
+
+  else
+    error(self.roundState)
+  end
 end
 
 function InGameState:draw()
@@ -52,8 +71,14 @@ function InGameState:mousereleased(x, y, button)
 end
 
 function InGameState:keypressed(key)
-  self.snowman:keypressed(key)
-  self.gui:keypressed(key)
+  if self.roundState == InGameState.ROUND_BEGIN_PLAY then
+    self.gui:keypressed(key)
+    -- no player movement
+  else
+    if not self.snowman:keypressed(key) then -- not handled
+      self.gui:keypressed(key)
+    end
+  end
 end
 
 function InGameState:keyreleased(key)

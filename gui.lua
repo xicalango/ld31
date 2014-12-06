@@ -92,13 +92,13 @@ end
 
 local DynamicLabel = class("Label")
 
-function Label:initialize(x, y, textFn)
+function DynamicLabel:initialize(x, y, textFn)
   self.x = x
   self.y = y
   self.textFn = textFn
 end
 
-function Label:draw()
+function DynamicLabel:draw()
   love.graphics.print( self.textFn(), self.x, self.y )
 end
 
@@ -183,16 +183,29 @@ function Gui:initialize()
   local ballParsWindow = self.window:addChildren( Window:new( 160, 50 ), "ballPars" )
 
   ballParsWindow:addChildren( Icon:new(5, 5, "assets/crossed_swords.png") )
-  ballParsWindow:addChildren( Label:new( 20, 5, function() return state.snowman.weapons[1].pars.dmg end, "ballPowerLabel" ) )
-  ballParsWindow:addChildren( Label:new( 60, 5, function() return math.floor(state.snowman.weapons[1].pars.speed / 100) end, "ballSpeedLabel" ) )
-  ballParsWindow:addChildren( Label:new( 20, 25, function() return state.snowman.weapons[1].pars.lifeTime end, "ballLifeTimeLabel" ) )
-  ballParsWindow:addChildren( Label:new( 60, 25, function() return state.snowman.weapons[1].pars.reload end, "ballReloadLabel" ) )
+  ballParsWindow:addChildren( DynamicLabel:new( 20, 5, function() return state.snowman.weapons[1].pars.dmg end, "ballPowerDynamicLabel" ) )
+  ballParsWindow:addChildren( DynamicLabel:new( 60, 5, function() return math.floor(state.snowman.weapons[1].pars.speed / 100) end, "ballSpeedDynamicLabel" ) )
+  ballParsWindow:addChildren( DynamicLabel:new( 20, 25, function() return state.snowman.weapons[1].pars.lifeTime end, "ballLifeTimeDynamicLabel" ) )
+  ballParsWindow:addChildren( DynamicLabel:new( 60, 25, function() return state.snowman.weapons[1].pars.reload end, "ballReloadDynamicLabel" ) )
 
   local cardViewWindow = self.window:addChildren( Window:new( 160, 305, 0, 50 ), "cardView" )
   cardViewWindow.border = true
 
-  cardViewWindow:addChildren( CardView:new(0, 0, 160, 305) )
+  self.cardView = cardViewWindow:addChildren( CardView:new(0, 0, 160, 305) )
 
+  local messagesWindow = self.window:addChildren( Window:new( 160, 50, 0, 480 - 50 ), "messages" )
+  messagesWindow:addChildren( DynamicLabel:new( 10, 10, function() 
+    
+    if state.roundState == InGameState.ROUND_BEGIN_PLAY then
+      return "Choose " .. tostring(state.rules.playCards) .. " card(s)!"
+    end
+
+  end), "messageLabel")
+
+end
+
+function Gui:setSelectMode(mode, num)
+  self.cardView:setSelectMode(mode, num)
 end
 
 function Gui:draw()

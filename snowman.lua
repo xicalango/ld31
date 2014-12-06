@@ -41,52 +41,74 @@ end
 
 function Snowman:keypressed(key)
 
+  local handled = false
+
   if key == keyconfig.player.up then
     self.goto.up = true
+    handled = true
   elseif key == keyconfig.player.down then
     self.goto.down = true
+    handled = true
   elseif key == keyconfig.player.left then
     self.goto.left = true
+    handled = true
   elseif key == keyconfig.player.right then
     self.goto.right = true
+    handled = true
   elseif key == keyconfig.player.sup then
     self.shoot.up = true
+    handled = true
   elseif key == keyconfig.player.sdown then
     self.shoot.down = true
+    handled = true
   elseif key == keyconfig.player.sleft then
     self.shoot.left = true
+    handled = true
   elseif key == keyconfig.player.sright then
     self.shoot.right = true
+    handled = true
   end
 
   self:updateGotoState()
   self:updateShootingState()
 
+  return handled
 end
 
 function Snowman:keyreleased(key)
-  
+ 
+  local handled = false
+
   if key == keyconfig.player.up then
     self.goto.up = false
+    handled = true
   elseif key == keyconfig.player.down then
     self.goto.down = false
+    handled = true
   elseif key == keyconfig.player.left then
     self.goto.left = false
+    handled = true
   elseif key == keyconfig.player.right then
     self.goto.right = false
+    handled = true
   elseif key == keyconfig.player.sup then
     self.shoot.up = false
+    handled = true
   elseif key == keyconfig.player.sdown then
     self.shoot.down = false
+    handled = true
   elseif key == keyconfig.player.sleft then
     self.shoot.left = false 
+    handled = true
   elseif key == keyconfig.player.sright then
     self.shoot.right = false 
+    handled = true
   end
 
   self:updateGotoState()
   self:updateShootingState()
 
+  return handled
 end
 
 function Snowman:updateShootingState()

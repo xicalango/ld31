@@ -15,6 +15,8 @@ require("gui")
 require("world")
 
 require("card")
+require("carddeck")
+require("rules")
 
 cardSpecs = require("assets/cardspecs")
 
@@ -40,6 +42,8 @@ function love.load()
   gameStateManager:registerState(InGameState)
 
   gameStateManager:changeState(InGameState)
+  
+  roundRng = love.math.newRandomGenerator()
 end
 
 function love.draw()
