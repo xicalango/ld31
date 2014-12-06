@@ -1,4 +1,5 @@
--- Paddle Game - #LD30 -- by <weldale@gmail.com>
+-- #LD31 - 2014 by <weldale@gmail.com>
+-- Adapted from: Paddle Game - #LD30 -- by <weldale@gmail.com> https://github.com/xicalango/ld30
 -- Original: Rocks-n-Blaster -- #LD48 -- by <weldale@gmail.com> https://github.com/xicalango/Rocks-n-Blaster
 
 GameState = class("GameState")
