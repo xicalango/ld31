@@ -82,6 +82,7 @@ function InGameState:reset()
   
   self.deck = CardDeck:new()
   self.cards = self.deck:drawCards(2)
+  table.insert( self.cards, Card:new("snowballMg") )
 
   self.rules = Rules:new()
 

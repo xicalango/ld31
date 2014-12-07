@@ -89,14 +89,14 @@ cardspecs.knight = MobCardSpec:new( "The Knight", "Spawns 1 or 2 knights.", love
 
 -- weapons
 
-cardspecs.snowballMg = WeaponCardSpec:new( "Snowball MG", "Rapid fire!", unknownImage ) 
+cardspecs.snowballMg = WeaponCardSpec:new( "Snowball MG", "Rapid fire!", love.graphics.newImage("assets/mg.png") ) 
 
 cardspecs.snowballMg.ballPars.size = .5
 cardspecs.snowballMg.ballPars.dmg = .2
 cardspecs.snowballMg.ballPars.reload = .1
 cardspecs.snowballMg.ballPars.speed = 300
 
-cardspecs.yellowSnow = WeaponCardSpec:new( "Yellow snow", "Never eat it!", unknownImage ) 
+cardspecs.yellowSnow = WeaponCardSpec:new( "Yellow snow", "Never eat it!", love.graphics.newImage("assets/yellowsnow.png")) 
 
 cardspecs.yellowSnow.ballPars.size = 1.2
 cardspecs.yellowSnow.ballPars.dmg = 1
@@ -104,7 +104,7 @@ cardspecs.yellowSnow.ballPars.reload = 1.3
 cardspecs.yellowSnow.ballPars.speed = 300
 cardspecs.yellowSnow.ballPars.tint = { 255, 255, 0, 255 }
 
-cardspecs.brownSnow = WeaponCardSpec:new( "Brown snow", "Ieks!", unknownImage ) 
+cardspecs.brownSnow = WeaponCardSpec:new( "Brown snow", "Ieks!", love.graphics.newImage("assets/brownsnow.png") ) 
 
 cardspecs.brownSnow.ballPars.size = 1.7
 cardspecs.brownSnow.ballPars.dmg = 1.5
