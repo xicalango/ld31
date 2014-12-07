@@ -41,7 +41,9 @@ end
 function Rules:checkGoals()
   for _, g in ipairs(self.goals) do
     if g:checkGoalCondition() then
-      -- yippee 
+      return true 
     end
   end
+
+  return false
 end

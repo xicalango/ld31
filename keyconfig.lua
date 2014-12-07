@@ -12,6 +12,7 @@ return {
     sright = 'right',
     cardsUp = ']',
     cardsDown = '[',
-    select = 'enter'
+    select = ' ',
+    accept = 'return'
   }
 }

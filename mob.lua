@@ -1,6 +1,6 @@
 -- #LD31 - 2014 by <weldale@gmail.com>
 
-local graphics = {
+local images = {
   tower = love.graphics.newImage("assets/mob_tower.png"),
   king = love.graphics.newImage("assets/mob_king.png"),
   queen = love.graphics.newImage("assets/mob_queen.png"),
@@ -21,10 +21,11 @@ function Mob:initialize(x, y, name)
 
   self.speed = self.mobspec.speed
   self.health = self.mobspec.health
+  self.isMob = true
 end
 
 function Mob:initGraphics(name)
-  self.graphics = Graphics:new(graphics[name], 20, 20)
+  self.graphics = Graphics:new(images[name], 20, 20)
   self:graphicOffsetToHitbox()
   
   self.graphics.tint = self.mobspec.defaultTint

@@ -19,6 +19,7 @@ function Entity:initialize(x, y)
 
   self.isWall = false
   self.isShot = false
+  self.isMob = false
 
   self.hitEffectTime = 0
 end
@@ -118,12 +119,10 @@ function Entity:draw()
   end
   
   if self.graphics then
-    local oldTint = self.graphics.tint
-    if self.hitEffectTime >= 0 then
-      self.graphics.tint[1] = 255 * (self.hitEffectTime / .5)
-    end
+    --if self.hitEffectTime >= 0 then
+    --  love.graphics.setColor(255 * (self.hitEffectTime / .5), self.graphics.tint[2], self.graphics.tint[3], self.graphics.tint[4])
+    --end
     self.graphics:draw(self.x, self.y)
-    self.graphics.tint = oldTint
   end
 
 end

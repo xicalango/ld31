@@ -12,6 +12,12 @@ function InGameState:initialize()
   self.camera.bgColor = {255, 255, 255}
   self.viewport = Viewport:new(160, 0, 480, 480)
   self.gui = Gui:new()
+
+  self.gui.selectedCardsCallback = 
+    function(cards)
+      self:cardsSelected(cards)
+    end
+
   self:reset()
 end
 
@@ -20,6 +26,35 @@ function InGameState:onActivation()
 
 
   self:reset()
+end
+
+function InGameState:cardsSelected(cards)
+  for i,v in ipairs(cards) do
+    v.removeFromHand = true
+  end
+
+  for i,v in ipairs(self.cards) do
+    if v.removeFromHand then
+      v.removeFromHand = false
+      table.remove(self.cards, i)
+    end
+  end
+
+  for i,v in ipairs(cards) do
+    self:activateCard(v)
+  end
+
+  self.roundState = InGameState.ROUND_ROUND
+end
+
+function InGameState:activateCard( card )
+
+  if card.cardSpec.category == "mob" then
+    card:onActivation()
+  elseif card.cardSpec.category == "goal" then
+    self.rules:addGoal(card)
+  end
+
 end
 
 function InGameState:reset()
@@ -54,9 +89,15 @@ function InGameState:update(dt)
     
   elseif self.roundState == InGameState.ROUND_ROUND then
     self.world:update(dt)
-
   elseif self.roundState == InGameState.ROUND_END then
-
+    if self.rules:checkGoals() then
+      -- yippeea won!
+      error("this is not an error =)")
+    else
+      self.snowman.x = 240
+      self.snowman.y = 240
+      self.roundState = InGameState.ROUND_BEGIN_DRAW
+    end
   else
     error(self.roundState)
   end
@@ -79,7 +120,11 @@ function InGameState:keypressed(key)
     self.gui:keypressed(key)
     -- no player movement
   else
-    if not self.snowman:keypressed(key) then -- not handled
+    if key == keyconfig.player.accept then
+      if self.world:mobCount() == 0 then
+        self.roundState = InGameState.ROUND_END
+      end
+    elseif not self.snowman:keypressed(key) then -- not handled
       self.gui:keypressed(key)
     end
   end

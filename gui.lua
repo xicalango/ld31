@@ -80,26 +80,28 @@ end
 
 local Label = class("Label")
 
-function Label:initialize(x, y, text)
+function Label:initialize(x, y, w, text)
   self.x = x
   self.y = y
+  self.w = w
   self.text = text
 end
 
 function Label:draw()
-  love.graphics.print( self.text, self.x, self.y )
+  love.graphics.printf( self.text, self.x, self.y, self.w )
 end
 
 local DynamicLabel = class("Label")
 
-function DynamicLabel:initialize(x, y, textFn)
+function DynamicLabel:initialize(x, y, w, textFn)
   self.x = x
   self.y = y
+  self.w = w
   self.textFn = textFn
 end
 
 function DynamicLabel:draw()
-  love.graphics.print( self.textFn(), self.x, self.y )
+  love.graphics.printf( self.textFn(), self.x, self.y, self.w )
 end
 
 local CardWidget = class("CardWidget")
@@ -136,8 +138,16 @@ function CardView:draw(ox, oy)
   for i = startIdx, endIdx do
     local c = state.cards[i]
 
-    if self.selectMode and i == self.selection then
-      love.graphics.setColor( 0, 255, 255, 255 )
+    if self.selectMode then
+
+      if i == self.selection then
+        love.graphics.setColor( 0, 255, 255, 255 )
+      elseif self.selectedItems[i] then
+        love.graphics.setColor( 255, 255, 0, 255 )
+      else
+        love.graphics.setColor( 255, 255, 255, 255 )
+      end
+
     else
       love.graphics.setColor( 255, 255, 255, 255 )
     end
@@ -148,7 +158,7 @@ function CardView:draw(ox, oy)
     love.graphics.rectangle("line", 0, 0, 45, 45)
     love.graphics.draw( c.cardSpec.img, 2, 2 )
 
-    love.graphics.print( c.cardSpec.name, 55, 15 )
+    love.graphics.printf( c.cardSpec.name, 55, 5, 50 )
 
     love.graphics.translate( 0, 50 ) 
   end
@@ -180,7 +190,7 @@ function CardView:keypressed(key)
   end
 
   if self.selectMode then
-    if key == keyconfig.player.up or key == keyconfig.player.sup then
+    if key == keyconfig.player.up or key == keyconfig.player.sup then -- up
       self.selection = self.selection - 1
       if self.selection <= 0 then
         self.selection = #state.cards
@@ -190,7 +200,8 @@ function CardView:keypressed(key)
       if self.selection < self.offset then
         self.offset = self.selection
       end
-    elseif key == keyconfig.player.down or key == keyconfig.player.sdown then
+
+    elseif key == keyconfig.player.down or key == keyconfig.player.sdown then -- down
       self.selection = self.selection + 1
 
       if self.selection > #state.cards then
@@ -201,9 +212,32 @@ function CardView:keypressed(key)
       if self.selection > self.offset + self.numCards then
         self.offset = self.selection - self.numCards
       end
+
+    elseif key == keyconfig.player.select then -- select
+      if self.selectedItems[self.selection] then
+        self.selectedItems[self.selection] = nil
+        self.selectedItemsCount = self.selectedItemsCount - 1
+      else
+        if self.selectedItemsCount == self.num then
+          -- geht ned effekt
+        else
+          self.selectedItems[self.selection] = true
+          self.selectedItemsCount = self.selectedItemsCount + 1
+        end
+      end
     end
   end
 
+end
+
+function CardView:getSelectedCards()
+  local cards = {}
+  for i, c in ipairs(state.cards) do
+    if self.selectedItems[i] then
+      table.insert( cards, c )
+    end
+  end
+  return cards
 end
 
 function CardView:setSelectMode(mode, num)
@@ -212,6 +246,8 @@ function CardView:setSelectMode(mode, num)
 
   if self.selectMode == true then
     self.selection = 1
+    self.selectedItems = {}
+    self.selectedItemsCount = 0
   end
 end
 
@@ -223,21 +259,30 @@ function Gui:initialize()
   local ballParsWindow = self.window:addChildren( Window:new( 160, 50 ), "ballPars" )
 
   ballParsWindow:addChildren( Icon:new(5, 5, "assets/crossed_swords.png") )
-  ballParsWindow:addChildren( DynamicLabel:new( 20, 5, function() return state.snowman.weapons[1].pars.dmg end, "ballPowerDynamicLabel" ) )
-  ballParsWindow:addChildren( DynamicLabel:new( 60, 5, function() return math.floor(state.snowman.weapons[1].pars.speed / 100) end, "ballSpeedDynamicLabel" ) )
-  ballParsWindow:addChildren( DynamicLabel:new( 20, 25, function() return state.snowman.weapons[1].pars.lifeTime end, "ballLifeTimeDynamicLabel" ) )
-  ballParsWindow:addChildren( DynamicLabel:new( 60, 25, function() return state.snowman.weapons[1].pars.reload end, "ballReloadDynamicLabel" ) )
+  ballParsWindow:addChildren( DynamicLabel:new( 20, 5, 20, function() return state.snowman.weapons[1].pars.dmg end, "ballPowerDynamicLabel" ) )
+  ballParsWindow:addChildren( DynamicLabel:new( 60, 5, 20, function() return math.floor(state.snowman.weapons[1].pars.speed / 100) end, "ballSpeedDynamicLabel" ) )
+  ballParsWindow:addChildren( DynamicLabel:new( 20, 25, 20, function() return state.snowman.weapons[1].pars.lifeTime end, "ballLifeTimeDynamicLabel" ) )
+  ballParsWindow:addChildren( DynamicLabel:new( 60, 25, 20, function() return state.snowman.weapons[1].pars.reload end, "ballReloadDynamicLabel" ) )
 
-  local cardViewWindow = self.window:addChildren( Window:new( 160, 305, 0, 50 ), "cardView" )
+  local cardViewWindow = self.window:addChildren( Window:new( 160, 255, 0, 50 ), "cardView" )
   cardViewWindow.border = true
 
-  self.cardView = cardViewWindow:addChildren( CardView:new(0, 0, 160, 305) )
+  self.cardView = cardViewWindow:addChildren( CardView:new(0, 0, 160, 255) )
 
-  local messagesWindow = self.window:addChildren( Window:new( 160, 50, 0, 480 - 50 ), "messages" )
-  messagesWindow:addChildren( DynamicLabel:new( 10, 10, function() 
+  local messagesWindow = self.window:addChildren( Window:new( 160, 50, 0, 480 - 55 ), "messages" )
+  messagesWindow:addChildren( DynamicLabel:new( 10, 10, 140, function() 
     
     if state.roundState == InGameState.ROUND_BEGIN_PLAY then
-      return "Choose " .. tostring(state.rules.playCards) .. " card(s)!"
+      return "Select cards: " .. tostring(self.cardView.selectedItemsCount) .. "/" .. tostring(state.rules.playCards)
+    elseif state.roundState == InGameState.ROUND_ROUND then
+      local mobCount = state.world:mobCount()
+      if mobCount == 0 then
+        return "Round completed! Press [" .. keyconfig.player.accept  .. "] to end round!"
+      else
+        return tostring(mobCount) .. " enemies to kill!"
+      end
+    else
+      return ""
     end
 
   end), "messageLabel")
@@ -253,7 +298,22 @@ function Gui:draw()
 end
 
 function Gui:keypressed(key)
+  if self.cardView.selectMode then
+    if key == keyconfig.player.accept then -- accept
+      if self.cardView.selectedItemsCount == self.cardView.num then
+        local selectedCards = self.cardView:getSelectedCards()
+        self.selectedCardsCallback( selectedCards )
+        self:setSelectMode(false)
+      else
+        -- geht ned
+      end
+
+      return true
+    end
+  end
+
   self.window:keypressed(key)
+  return true
 end
 
 function Gui:keyreleased(key)

@@ -5,7 +5,23 @@ World = class("World")
 function World:initialize()
   self.entities = {}
   self.addEntities = {}
-  --self:createWall()
+
+  self.createdLocations = {}
+end
+
+function World:reset()
+  self.createdLocations = {}
+end
+
+function World:getNewLocation()
+  local tx, ty
+  repeat
+    tx, ty = love.math.random(0, 11), love.math.random(0, 11)
+  until not ( self.createdLocations[ {tx, ty} ] or (tx == 5 and ty == 5) )
+
+  self.createdLocations[ {tx, ty} ] = true
+
+  return self:unrasterCoordinate(tx, ty)
 end
 
 function World:createWall()
@@ -54,6 +70,19 @@ end
 
 function World:draw()
   for i, e in ipairs(self.entities) do
+    love.graphics.setColor( 255, 255, 255, 255 )
     e:draw()
   end
 end
+
+function World:mobCount()
+  local count = 0
+  for i,e in ipairs(self.entities) do
+    if e.isMob then
+      count = count + 1
+    end
+  end
+
+  return count
+end
+
