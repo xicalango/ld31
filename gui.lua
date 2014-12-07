@@ -165,7 +165,7 @@ function CardView:draw(ox, oy)
 
     love.graphics.printf( c.cardSpec.name, 55, 5, 50 )
 
-    if i == self.selection then
+    if self.selectMode and i == self.selection then
         love.graphics.setColor( 255, 255, 255, 255 )
         love.graphics.rectangle("fill", self.w, 0, 240, 45)
         love.graphics.setColor( 0, 0, 0, 255 )
@@ -270,14 +270,19 @@ Gui = class("Gui")
 function Gui:initialize()
   self.window = Window:new( 160, 480, 0, 0 )
 
-  local ballParsWindow = self.window:addChildren( Window:new( 160, 50 ), "ballPars" )
+  local ballParsWindow = self.window:addChildren( Window:new( 80, 50 ), "ballPars" )
 
   ballParsWindow:addChildren( Icon:new(5, 5, "assets/crossed_swords.png") )
-  ballParsWindow:addChildren( DynamicLabel:new( 20, 5, 20, function() return state.snowman.weapons[1].pars.dmg end, "ballPowerDynamicLabel" ) )
-  ballParsWindow:addChildren( DynamicLabel:new( 60, 5, 20, function() return math.floor(state.snowman.weapons[1].pars.speed / 100) end, "ballSpeedDynamicLabel" ) )
-  ballParsWindow:addChildren( DynamicLabel:new( 20, 25, 20, function() return state.snowman.weapons[1].pars.lifeTime end, "ballLifeTimeDynamicLabel" ) )
-  ballParsWindow:addChildren( DynamicLabel:new( 60, 25, 20, function() return state.snowman.weapons[1].pars.reload end, "ballReloadDynamicLabel" ) )
+  ballParsWindow:addChildren( DynamicLabel:new( 25, 5, 10, function() return state.snowman.weapons[1].pars.dmg end, "ballPowerDynamicLabel" ) )
+  ballParsWindow:addChildren( DynamicLabel:new( 40, 5, 10, function() return math.floor(state.snowman.weapons[1].pars.speed / 100) end, "ballSpeedDynamicLabel" ) )
+  ballParsWindow:addChildren( DynamicLabel:new( 25, 25, 10, function() return state.snowman.weapons[1].pars.lifeTime end, "ballLifeTimeDynamicLabel" ) )
+  ballParsWindow:addChildren( DynamicLabel:new( 40, 25, 10, function() return state.snowman.weapons[1].pars.reload end, "ballReloadDynamicLabel" ) )
 
+  local playerStatsWindow = self.window:addChildren( Window:new( 85, 50, 80 ), "playerStats" )
+  
+  playerStatsWindow:addChildren( Icon:new( 5, 5, "assets/heart.png" ) )
+  playerStatsWindow:addChildren( DynamicLabel:new( 25, 5, 10, function() return state.snowman.health end ) )
+  
   local cardViewWindow = self.window:addChildren( Window:new( 160, 255, 0, 50 ), "cardView" )
   cardViewWindow.border = true
 

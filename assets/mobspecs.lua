@@ -1,38 +1,22 @@
-return {
-  tower = {
-    name = "tower",
-    speed = 200,
-    health = 3,
-    defaultTint = {0, 0, 0, 255}
-  },
-  king = {
-    name = "king",
-    speed = 200,
-    health = 1,
-    defaultTint = {0, 0, 0, 255}
-  },
-  queen = {
-    name = "queen",
-    speed = 200,
-    health = 3,
-    defaultTint = {0, 0, 0, 255}
-  },
-  bishop = {
-    name = "bishop",
-    speed = 200,
-    health = 3,
-    defaultTint = {0, 0, 0, 255}
-  },
-  knight = {
-    name = "knight",
-    speed = 200,
-    health = 3,
-    defaultTint = {0, 0, 0, 255}
-  },
-  pawn = {
-    name = "pawn",
-    speed = 200,
-    health = 1,
-    defaultTint = {0, 0, 0, 255}
-  }
-}
+
+local mobs = {}
+
+mobs.tower = MobSpec:new( "tower", 0, 3 )
+
+mobs.king = MobSpec:new( "king", 150, 2 )
+
+mobs.queen = MobSpec:new( "queen", 200, 3 )
+
+mobs.bishop = MobSpec:new( "bishop", 200, 3 )
+
+mobs.knight = MobSpec:new( "knight", 250, 2 )
+
+mobs.pawn = MobSpec:new( "pawn", 50, 1 )
+mobs.pawn.touchDamage = .5
+
+function mobs.pawn:setup(mob)
+  mob.state = "chase"
+end
+
+
+return mobs

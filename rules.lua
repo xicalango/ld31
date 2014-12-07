@@ -4,7 +4,7 @@ Rules = class("Rules")
 
 function Rules:initialize()
   self.drawCards = 1
-  self.playCards = 1
+  self.playCards = 2
 
   self.goal = nil
 
@@ -56,6 +56,11 @@ end
 function Rules:onRoundExit()
   for i,v in ipairs(self.modifiers) do
     v:onRoundExit()
+
+    if v.remove then
+      v:onDeactivation()
+      table.remove(self.modifiers, i)
+    end
   end
   
   if self.goal then

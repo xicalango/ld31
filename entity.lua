@@ -88,6 +88,10 @@ function Entity:getHitRectangle(ox, oy)
     oy + self.hitbox.bottom
 end
 
+function Entity:dirTo(e)
+  return toPol(e.x - self.x, e.y - self.y)
+end
+
 function Entity:collidesWith(entity, ox, oy)
   local sx1, sy1, sx2, sy2 = self:getHitRectangle(ox, oy)
   local ox1, oy1, ox2, oy2 = entity:getHitRectangle()

@@ -84,6 +84,7 @@ function Card:initialize(cardSpecName)
   self.cardSpec = cardSpecs[cardSpecName]
   self.cardSpec:setup(self, state)
   self.removeFromHand = false
+  self.remove = false
 end
 
 function Card:onActivation()

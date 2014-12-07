@@ -17,6 +17,10 @@ function Snowman:initialize(x, y)
   self.weapons = { 
     { reloadTimer = 0, pars = BallParameters:new()} 
   }
+
+  self.health = 3
+
+  self.dualShot = false
 end
 
 function Snowman:update(dt)
@@ -140,5 +144,19 @@ function Snowman:updateGotoState()
     self.vx = 1
   else
     self.vx = 0
+  end
+end
+
+function Snowman:onHit(e)
+  Entity.onHit(self, e)
+
+  self:decreaseHealth(e.touchDamage)
+end
+
+function Snowman:decreaseHealth(amt)
+  self.health = self.health - amt
+
+  if self.health <= 0 then
+    state:gameOver()
   end
 end

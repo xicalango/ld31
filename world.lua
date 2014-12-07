@@ -42,10 +42,12 @@ end
 
 function World:addEntity(e)
   table.insert(self.addEntities, e)
+  return e
 end
 
 function World:addEntityRaw(e)
   table.insert(self.entities, e)
+  return e
 end
 
 function World:unrasterCoordinate(x, y)

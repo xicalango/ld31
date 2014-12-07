@@ -10,6 +10,22 @@ for i = 1, 4 do
   cardspecs["play" .. tostring(i)] = PlayCardSpec:new( i, { count = 2 } )
 end
 
+-- modifier
+
+cardspecs.split = CardSpec:new( "Split", "modifier", "Splits all enemies in half.", unknownImage, { count = 2 } )
+
+function cardspecs.split:onRoundEnter(card, state)
+  for _, e in ipairs(state.world.entities) do
+    if e.isMob then
+      e:split()
+    end
+  end
+end
+
+function cardspecs.split:onRoundExit(card, state)
+  card.remove = true
+end
+
 -- mobs
 
 cardspecs.king = MobCardSpec:new( "The King", "A tough enemy.", love.graphics.newImage("assets/mob_king.png"), { mobName="king"} )

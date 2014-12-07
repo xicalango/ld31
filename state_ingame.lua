@@ -53,6 +53,8 @@ function InGameState:activateCard( card )
 
   if card.cardSpec.category == "goal" then
     self.rules:addGoal(card)
+  elseif card.cardSpec.category == "modifier" then
+    self.rules:addModifier(card)
   else
     card:onActivation()
   end
@@ -67,12 +69,18 @@ function InGameState:reset()
   
   self.deck = CardDeck:new()
   self.cards = self.deck:drawCards(2)
+  table.insert( self.cards, Card:new("split") )
+  table.insert( self.cards, Card:new("pawn") )
 
   self.rules = Rules:new()
 
   self.roundState = InGameState.ROUND_BEGIN_DRAW
 
   self.killedMobs = 0
+end
+
+function InGameState:gameOver(lost)
+  error("Do something")
 end
 
 function InGameState:update(dt)
@@ -100,7 +108,7 @@ function InGameState:update(dt)
     if self.rules:checkGoals() then
       print("won")
       -- yippeea won!
-      error("this is not an error =)")
+      self:gameOver(true)
     else
       self.snowman.x = 240
       self.snowman.y = 240
