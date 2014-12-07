@@ -71,9 +71,19 @@ function MobCardSpec:onActivation(card, state)
   local num = love.math.random( self.numRange[1], self.numRange[2] )
   local cx, cy
 
+  --hacky hack
+
+  local mobName = self.mobName
+  
+  print(state.kingChamps)
+
+  if self.mobName == "king" and state.kingChamps then
+    mobName = "kingChamp"
+  end
+
   for i = 1, num do
     cx, cy = state.world:getNewLocation()
-    state.world:addEntityRaw( Mob:new( cx, cy, self.mobName ) )
+    state.world:addEntityRaw( Mob:new( cx, cy, mobName ) )
   end
 end
 

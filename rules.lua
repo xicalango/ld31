@@ -13,6 +13,10 @@ end
 
 function Rules:addGoal(goal)
   if self.goal then
+    if goal and self.goal.cardSpec == goal.cardSpec then
+      return
+    end
+
     self.goal:onDeactivation()
   end
 
@@ -65,5 +69,8 @@ function Rules:onRoundExit()
   
   if self.goal then
     self.goal:onRoundExit()
+    if self.goal.remove then
+      self:addGoal(nil)
+    end
   end
 end

@@ -18,7 +18,11 @@ function Snowman:initialize(x, y)
     { reloadTimer = 0, pars = BallParameters:new()} 
   }
 
+  self.maxHealth = 3
   self.health = 3
+
+  self.invincible = false
+  self.invincibilityTimer = 0
 
   self.dualShot = false
 end
@@ -53,10 +57,27 @@ function Snowman:update(dt)
     end
   end
 
+  if self.invincibilityTimer > 0 then
+    self.invincibilityTimer = self.invincibilityTimer - dt
+    if self.invincibilityTimer <= 0 then
+      self.invincible = false
+    end
+  end
+
   for i,w in ipairs(self.weapons) do
     if w.reloadTimer > 0 then
       w.reloadTimer = w.reloadTimer - dt
     end
+  end
+end
+
+function Snowman:draw()
+  if self.invincible then
+    if math.floor(self.invincibilityTimer * 10) % 2 == 0 then
+      Entity.draw(self)
+    end
+  else
+    Entity.draw(self)
   end
 end
 
@@ -165,15 +186,22 @@ function Snowman:updateGotoState()
 end
 
 function Snowman:onHit(e)
+  if self.invincible then
+    return
+  end
+
   Entity.onHit(self, e)
 
   self:decreaseHealth(e.touchDamage)
 end
 
 function Snowman:decreaseHealth(amt)
-  self.health = self.health - amt
+    self.health = self.health - amt
 
-  if self.health <= 0 then
-    state:gameOver()
-  end
+    if self.health <= 0 then
+      state:gameOver()
+    end
+
+    self.invincibilityTimer = 1
+    self.invincible = true
 end

@@ -171,7 +171,19 @@ function CardView:draw(ox, oy)
         love.graphics.setColor( 0, 0, 0, 255 )
         love.graphics.rectangle("line", self.w, 0, 240, 45)
 
-        love.graphics.printf(c.cardSpec.desc, self.w + 5, 5, 235 )
+        local desc = ""
+
+        if c.cardSpec.category == "rule" then
+          desc = desc .. "New rule: "
+        elseif c.cardSpec.category == "action" then
+          desc = desc .. "One time action: "
+        elseif c.cardSpec.category == "goal" then
+          desc = desc .. "New goal: "
+        end
+
+        desc = desc .. c.cardSpec.desc
+
+        love.graphics.printf(desc, self.w + 5, 5, 235 )
     end
 
     love.graphics.translate( 0, 50 ) 

@@ -40,7 +40,17 @@ function InGameState:cardsSelected(cards)
     end
   end
 
+  local miscCards = {}
+
   for i,v in ipairs(cards) do
+    if v.cardSpec.category == "goal" or v.cardSpec.category == "modifier" then
+      self:activateCard(v)
+    else
+      table.insert(miscCards, v)
+    end
+  end
+
+  for i,v in ipairs(miscCards) do
     self:activateCard(v)
   end
 
@@ -69,15 +79,17 @@ function InGameState:reset()
   
   self.deck = CardDeck:new()
   self.cards = self.deck:drawCards(2)
-  table.insert( self.cards, Card:new("split") )
-  table.insert( self.cards, Card:new("pawn") )
-  table.insert( self.cards, Card:new("dualShot") )
+  table.insert( self.cards, Card:new("goalKingMurderer") )
+  table.insert( self.cards, Card:new("king") )
 
   self.rules = Rules:new()
 
   self.roundState = InGameState.ROUND_BEGIN_DRAW
 
   self.killedMobs = 0
+  self.survivedRounds = 0
+
+  self.kingChamps = false
 end
 
 function InGameState:gameOver(lost)

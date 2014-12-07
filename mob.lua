@@ -3,6 +3,7 @@
 local images = {
   tower = love.graphics.newImage("assets/mob_tower.png"),
   king = love.graphics.newImage("assets/mob_king.png"),
+  kingChamp = love.graphics.newImage("assets/mob_kingChamp.png"),
   queen = love.graphics.newImage("assets/mob_queen.png"),
   bishop = love.graphics.newImage("assets/mob_bishop.png"),
   knight = love.graphics.newImage("assets/mob_knight.png"),
@@ -26,7 +27,6 @@ function MobSpec:update(mob, dt)
 end
 
 function MobSpec:hitSnowman(mob, snowman)
-  mob:die()
 end
 
 local mobspecs = require("assets/mobspecs")
