@@ -73,7 +73,7 @@ end
 
 mobs.tower = MobSpec:new( "tower", 0, 3 )
 
-mobs.tower.updateFn = shootCooldown( {2,6}, .5, {3,3} )
+mobs.tower.updateFn = shootCooldown( {.5, 1.3}, .5, {2,4} )
 mobs.tower.ballpars = BallParameters:new(true)
 mobs.tower.ballpars.chasing = true
 
@@ -87,7 +87,7 @@ function mobs.tower:update(mob, dt)
 end
 
 mobs.king = MobSpec:new( "king", 150, 2 )
-mobs.king.updateFn = shootCooldownChase( {1,3}, .4, {3, 4}, .5 )
+mobs.king.updateFn = shootCooldownChase( {.5, 2}, .4, {3, 5}, .5 )
 mobs.king.touchDamage = 1
 mobs.king.ballpars = BallParameters:new(true)
 mobs.king.ballpars.pattern = function(mob, state)
@@ -131,7 +131,7 @@ function mobs.kingChamp:update(mob, dt)
 end
 
 mobs.queen = MobSpec:new( "queen", 200, 3 )
-mobs.queen.updateFn = shootCooldownChase( {1,3}, .4, {3, 4}, .5 )
+mobs.queen.updateFn = shootCooldownChase( {.5,2}, .4, {3, 4}, .5 )
 mobs.queen.touchDamage = 1
 mobs.queen.ballpars = BallParameters:new(true)
 mobs.queen.ballpars.pattern = function(mob, state)
@@ -154,7 +154,7 @@ mobs.bishop = MobSpec:new( "bishop", 75, 3 )
 mobs.bishop.ballpars = BallParameters:new(true)
 
 function mobs.bishop:setup(mob)
-  mob.pauseCounter = love.math.random(1,3)
+  mob.pauseCounter = love.math.random(1,1)
 end
 
 function mobs.bishop:update(mob, dt)
@@ -168,7 +168,7 @@ function mobs.bishop:update(mob, dt)
     end
 
   elseif mob.state == "shoot" then
-    mob.pauseCounter = love.math.random(1,3)
+    mob.pauseCounter = love.math.random(.5,1.3)
     mob.state = "chase"
   end
 end

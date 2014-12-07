@@ -70,6 +70,7 @@ function InGameState:activateCard( card )
     card:onActivation()
   end
 
+  self.deck:addToRubbish(card)
 end
 
 function InGameState:reset()

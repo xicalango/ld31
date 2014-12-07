@@ -300,7 +300,7 @@ function Gui:initialize()
 
   self.cardView = cardViewWindow:addChildren( CardView:new(0, 0, 160, 255) )
 
-  local ruleWindow = self.window:addChildren( Window:new(160, 75, 0, 425) )
+  local ruleWindow = self.window:addChildren( Window:new(160, 75, 0, 360) )
 
   ruleWindow:addChildren( DynamicLabel:new( 5, 5, 70, function() return "Draw: " .. state.rules.drawCards end ) )
   ruleWindow:addChildren( DynamicLabel:new( 75, 5, 70, function() return "Play: " .. state.rules.playCards end ) )

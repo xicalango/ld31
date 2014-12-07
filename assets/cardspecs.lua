@@ -80,12 +80,12 @@ end
 
 -- mobs
 
-cardspecs.king = MobCardSpec:new( "The King", "Spawns King Douche.", love.graphics.newImage("assets/mob_king.png"), { mobName="king", count = 4 } )
-cardspecs.queen = MobCardSpec:new( "The Queen", "Spawns Queen Douche.", love.graphics.newImage("assets/mob_queen.png"), { mobName="queen", count = 4 }  )
-cardspecs.pawn = MobCardSpec:new( "The Pawn", "Spawns 1 to 5 pawns.", love.graphics.newImage("assets/mob_pawn.png"), { mobName="pawn", numRange={1,5}, count = 6 } )
-cardspecs.tower = MobCardSpec:new( "The Tower", "Spawns 1 or 2 towers.", love.graphics.newImage("assets/mob_tower.png"), { mobName="tower", numRange={1,2}, count = 5 } )
-cardspecs.bishop = MobCardSpec:new( "The Bishop", "Spawns 1 to 3 bishops.", love.graphics.newImage("assets/mob_bishop.png"), { mobName="bishop", numRange={1,3}, count = 5 } )
-cardspecs.knight = MobCardSpec:new( "The Knight", "Spawns 1 or 2 knights.", love.graphics.newImage("assets/mob_knight.png"), { mobName="knight", numRange={1,2}, count = 5 } )
+cardspecs.king = MobCardSpec:new( "The King", "Spawns King Douche.", love.graphics.newImage("assets/mob_king.png"), { mobName="king", count = 5 } )
+cardspecs.queen = MobCardSpec:new( "The Queen", "Spawns Queen Douche.", love.graphics.newImage("assets/mob_queen.png"), { mobName="queen", count = 5 }  )
+cardspecs.pawn = MobCardSpec:new( "The Pawn", "Spawns 1 to 5 pawns.", love.graphics.newImage("assets/mob_pawn.png"), { mobName="pawn", numRange={1,5}, count = 10 } )
+cardspecs.tower = MobCardSpec:new( "The Tower", "Spawns 1 or 2 towers.", love.graphics.newImage("assets/mob_tower.png"), { mobName="tower", numRange={1,2}, count = 7 } )
+cardspecs.bishop = MobCardSpec:new( "The Bishop", "Spawns 1 to 3 bishops.", love.graphics.newImage("assets/mob_bishop.png"), { mobName="bishop", numRange={1,3}, count = 7 } )
+cardspecs.knight = MobCardSpec:new( "The Knight", "Spawns 1 or 2 knights.", love.graphics.newImage("assets/mob_knight.png"), { mobName="knight", numRange={1,2}, count = 7 } )
 
 -- weapons
 
@@ -114,13 +114,13 @@ cardspecs.brownSnow.ballPars.tint = { 127, 127, 0, 255 }
 
 -- weaponmods
 
-cardspecs.wpnSpeedUp = WeaponModCardSpec:new( "Shot speed up", "Snowball speed up", love.graphics.newImage("assets/black_club.png"), {action = function(w) w.speed = w.speed + 25 end, count = 3} )  
-cardspecs.wpnReloadDown = WeaponModCardSpec:new( "Reload down", "Snowball reload time down", love.graphics.newImage("assets/black_diamond.png"), {action = function(w) w.reload = w.reload - .1 end, count = 3} )  
-cardspecs.wpnRangeUp = WeaponModCardSpec:new( "Range up", "Snowball range up", love.graphics.newImage("assets/black_spade.png"), {action = function(w) w.lifeTime = w.lifeTime + .1 end, count = 3} )  
+cardspecs.wpnSpeedUp = WeaponModCardSpec:new( "Shot speed up", "Snowball speed up", love.graphics.newImage("assets/black_club.png"), {action = function(w) w.speed = w.speed + 25 end, count = 2} )  
+cardspecs.wpnReloadDown = WeaponModCardSpec:new( "Reload down", "Snowball reload time down", love.graphics.newImage("assets/black_diamond.png"), {action = function(w) w.reload = w.reload - .1 end, count = 2} )  
+cardspecs.wpnRangeUp = WeaponModCardSpec:new( "Range up", "Snowball range up", love.graphics.newImage("assets/black_spade.png"), {action = function(w) w.lifeTime = w.lifeTime + .1 end, count = 2} )  
 
-cardspecs.wpnSpeedDown = WeaponModCardSpec:new( "Shot speed down", "Snowball speed down", love.graphics.newImage("assets/white_club.png"), {action = function(w) w.speed = w.speed - 25 end, count = 3} )  
-cardspecs.wpnReloadUp = WeaponModCardSpec:new( "Reload up", "Snowball reload time up", love.graphics.newImage("assets/white_diamond.png"), {action = function(w) w.reload = w.reload + .1 end, count = 3} )  
-cardspecs.wpnRangeDown = WeaponModCardSpec:new( "Range down", "Snowball range down", love.graphics.newImage("assets/white_spade.png"), {action = function(w) w.lifeTime = w.lifeTime - .1 end, count = 3} )  
+cardspecs.wpnSpeedDown = WeaponModCardSpec:new( "Shot speed down", "Snowball speed down", love.graphics.newImage("assets/white_club.png"), {action = function(w) w.speed = w.speed - 25 end, count = 2} )  
+cardspecs.wpnReloadUp = WeaponModCardSpec:new( "Reload up", "Snowball reload time up", love.graphics.newImage("assets/white_diamond.png"), {action = function(w) w.reload = w.reload + .1 end, count = 2} )  
+cardspecs.wpnRangeDown = WeaponModCardSpec:new( "Range down", "Snowball range down", love.graphics.newImage("assets/white_spade.png"), {action = function(w) w.lifeTime = w.lifeTime - .1 end, count = 2} )  
 
 -- goals
 
