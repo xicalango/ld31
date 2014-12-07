@@ -26,8 +26,6 @@ end
 
 function InGameState:onActivation()
   state = self
-
-
   self:reset()
 end
 

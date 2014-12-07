@@ -26,6 +26,8 @@ require("ball")
 require("mob")
 
 require("state_ingame")
+require("state_title")
+require("state_gameover")
 
 debug = {
   drawHitboxes = false
@@ -49,8 +51,10 @@ function love.load()
 
   gameStateManager = GameStateManager:new()
   gameStateManager:registerState(InGameState)
+  gameStateManager:registerState(TitleState)
+  --gameStateManager:registerState(InGameState)
 
-  gameStateManager:changeState(InGameState)
+  gameStateManager:changeState(TitleState)
   
   roundRng = love.math.newRandomGenerator()
 
