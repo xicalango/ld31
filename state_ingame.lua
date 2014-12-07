@@ -63,7 +63,7 @@ function InGameState:reset()
   self.snowman = Snowman:new( 240, 240 )
 
   self.world = World:new()
-  self.world:addEntity( self.snowman )
+  self.world:addEntityRaw( self.snowman )
   
   self.deck = CardDeck:new()
   self.cards = self.deck:drawCards(2)

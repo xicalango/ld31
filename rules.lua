@@ -4,7 +4,7 @@ Rules = class("Rules")
 
 function Rules:initialize()
   self.drawCards = 1
-  self.playCards = 4
+  self.playCards = 1
 
   self.goals = {}
   self.numGoals = 1
