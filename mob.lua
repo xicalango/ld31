@@ -67,6 +67,7 @@ function Mob:update(dt)
   Entity.update(self, dt)
 
   if self.state == "stand" then
+    self.vx, self.vy = 0, 0
   elseif self.state == "chase" then
     local _, phi = self:dirTo( state.snowman )
     self.vx, self.vy = toCart( 1, phi )
@@ -77,6 +78,9 @@ function Mob:update(dt)
         local _, phi = self:dirTo( state.snowman )
         state:shoot( self, self.mobspec.ballpars, toCart( 1, phi ) ) 
       elseif self.mobspec.ballpars.pattern then
+      
+        self.mobspec.ballpars.pattern(self, state)
+
       else
         local phi = love.math.random() * 2 * math.pi
         state:shoot( self, self.mobspec.ballpars, toCart( 1, phi ) )

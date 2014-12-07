@@ -30,7 +30,24 @@ function Snowman:update(dt)
     for i,w in ipairs(self.weapons) do
       if w.reloadTimer <= 0 then
         local sx, sy = dirToCart( self.shooting )
-        state:shoot( self, w.pars, sx, sy )
+        if self.dualShot then
+          if self.shooting == "left" then
+            state:shoot( self, w.pars, sx, sy, 0, -5 )
+            state:shoot( self, w.pars, sx, sy, 0, 5 ) 
+          elseif self.shooting == "right" then
+            state:shoot( self, w.pars, sx, sy, 0, -5 )
+            state:shoot( self, w.pars, sx, sy, 0, 5 ) 
+          elseif self.shooting == "up" then
+            state:shoot( self, w.pars, sx, sy, -5, 0 )
+            state:shoot( self, w.pars, sx, sy, 5, 0 ) 
+          elseif self.shooting == "down" then
+            state:shoot( self, w.pars, sx, sy, -5, 0 )
+            state:shoot( self, w.pars, sx, sy, 5, 0 ) 
+          end
+        else
+          state:shoot( self, w.pars, sx, sy )
+        end
+
         w.reloadTimer = w.pars.reload
       end
     end

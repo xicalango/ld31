@@ -17,7 +17,7 @@ function World:getNewLocation()
   local tx, ty
   repeat
     tx, ty = love.math.random(0, 11), love.math.random(0, 11)
-  until not ( self.createdLocations[ {tx, ty} ] or (tx == 5 and ty == 5) )
+  until not ( self.createdLocations[ {tx, ty} ] or ( math.abs(tx - 5) + math.abs(ty - 5) <= 2 ) )
 
   self.createdLocations[ {tx, ty} ] = true
 

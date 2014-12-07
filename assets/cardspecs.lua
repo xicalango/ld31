@@ -26,6 +26,20 @@ function cardspecs.split:onRoundExit(card, state)
   card.remove = true
 end
 
+cardspecs.dualShot = CardSpec:new( "Gemini", "modifier", "Dual shot.", unknownImage, { count = 2 } )
+
+function cardspecs.dualShot:onActivation(card, state)
+  state.snowman.dualShot = true
+end
+
+function cardspecs.dualShot:onDeactivation(card, state)
+  state.snowman.dualShot = false
+end
+
+function cardspecs.dualShot:onRoundExit(card, state)
+  card.remove = true
+end
+
 -- mobs
 
 cardspecs.king = MobCardSpec:new( "The King", "A tough enemy.", love.graphics.newImage("assets/mob_king.png"), { mobName="king"} )

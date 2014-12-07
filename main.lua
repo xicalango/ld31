@@ -28,7 +28,7 @@ require("mob")
 require("state_ingame")
 
 debug = {
-  drawHitboxes = true
+  drawHitboxes = false
 }
 
 global = {

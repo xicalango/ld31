@@ -62,7 +62,7 @@ function InGameState:activateCard( card )
 end
 
 function InGameState:reset()
-  self.snowman = Snowman:new( 240, 240 )
+  self.snowman = Snowman:new( 220, 220 )
 
   self.world = World:new()
   self.world:addEntityRaw( self.snowman )
@@ -71,6 +71,7 @@ function InGameState:reset()
   self.cards = self.deck:drawCards(2)
   table.insert( self.cards, Card:new("split") )
   table.insert( self.cards, Card:new("pawn") )
+  table.insert( self.cards, Card:new("dualShot") )
 
   self.rules = Rules:new()
 
@@ -110,8 +111,8 @@ function InGameState:update(dt)
       -- yippeea won!
       self:gameOver(true)
     else
-      self.snowman.x = 240
-      self.snowman.y = 240
+      self.snowman.x = 220
+      self.snowman.y = 220
       self.roundState = InGameState.ROUND_BEGIN_DRAW
     end
   else
@@ -185,6 +186,8 @@ function InGameState:hitsEntityOn( entity, x, y )
   return nil
 end
 
-function InGameState:shoot( e, pars, sx, sy )
-  self.world:addEntity( Ball:new( e, e.x, e.y, sx, sy, pars, pars ) )
+function InGameState:shoot( e, pars, sx, sy, dx, dy )
+  dx = dx or 0
+  dy = dy or 0
+  self.world:addEntity( Ball:new( e, e.x + dx, e.y + dy, sx, sy, pars, pars ) )
 end
