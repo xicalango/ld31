@@ -100,7 +100,7 @@ function Entity:collidesWith(entity, ox, oy)
 end
 
 function Entity:blocks(e)
-  return self.isWall
+  return not e.isShot and self.isWall
 end
 
 function Entity:onCollideWith( obj )

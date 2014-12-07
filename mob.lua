@@ -70,6 +70,19 @@ function Mob:update(dt)
   elseif self.state == "chase" then
     local _, phi = self:dirTo( state.snowman )
     self.vx, self.vy = toCart( 1, phi )
+  elseif self.state == "shoot" then
+    
+    if self.mobspec.ballpars then
+      if self.mobspec.ballpars.chasing then
+        local _, phi = self:dirTo( state.snowman )
+        state:shoot( self, self.mobspec.ballpars, toCart( 1, phi ) ) 
+      elseif self.mobspec.ballpars.pattern then
+      else
+        local phi = love.math.random() * 2 * math.pi
+        state:shoot( self, self.mobspec.ballpars, toCart( 1, phi ) )
+      end
+    end
+
   end
 
   self.mobspec:update(self, dt)
@@ -91,11 +104,13 @@ function Mob:die()
 end
 
 function Mob:onHit(shot)
-  Entity.onHit(self, shot)
-  self.health = self.health - shot.pars.dmg
+  if not shot.owner.isMob then
+    Entity.onHit(self, shot)
+    self.health = self.health - shot.pars.dmg
 
-  if self.health <= 0 then
-    self:die()
+    if self.health <= 0 then
+      self:die()
+    end
   end
 end
 

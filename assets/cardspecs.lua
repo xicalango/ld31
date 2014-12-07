@@ -30,6 +30,8 @@ end
 
 cardspecs.king = MobCardSpec:new( "The King", "A tough enemy.", love.graphics.newImage("assets/mob_king.png"), { mobName="king"} )
 cardspecs.pawn = MobCardSpec:new( "The Pawn", "An easy enemy.", love.graphics.newImage("assets/mob_pawn.png"), { mobName="pawn", numRange={1,5} } )
+cardspecs.tower = MobCardSpec:new( "The Tower", "An easy enemy.", love.graphics.newImage("assets/mob_tower.png"), { mobName="tower", numRange={1,2} } )
+cardspecs.bishop = MobCardSpec:new( "The Bishop", "An easy enemy.", love.graphics.newImage("assets/mob_bishop.png"), { mobName="bishop", numRange={1,3} } )
 
 -- weapons
 
