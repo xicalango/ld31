@@ -6,20 +6,21 @@ function Rules:initialize()
   self.drawCards = 1
   self.playCards = 1
 
-  self.goals = {}
-  self.numGoals = 1
+  self.goal = nil
 
   self.modifiers = {}
 end
 
 function Rules:addGoal(goal)
-  table.insert(self.goals, goal)
-  if #self.goals > self.numGoals then
-    self.goals[1]:onDeactivation()
-    table.remove(self.goals, 1)
+  if self.goal then
+    self.goal:onDeactivation()
   end
 
-  goal:onActivation()
+  self.goal = goal
+
+  if self.goal then
+    self.goal:onActivation()
+  end
 end
 
 function Rules:addModifier(modifier)
@@ -39,31 +40,25 @@ function Rules:removeModifier(modifier)
 end
 
 function Rules:checkGoals()
-  for _, g in ipairs(self.goals) do
-    if g:checkGoalCondition() then
-      return true 
-    end
-  end
-
-  return false
+  return self.goal and self.goal:checkGoalCondition()
 end
 
 function Rules:onRoundEnter()
-  for i,v in ipairs(self.goals) do
+  for i,v in ipairs(self.modifiers) do
     v:onRoundEnter()
   end
 
-  for i,v in ipairs(self.modifiers) do
-    v:onRoundEnter()
+  if self.goal then
+    self.goal:onRoundEnter()
   end
 end
 
 function Rules:onRoundExit()
-  for i,v in ipairs(self.goals) do
-    v:onRoundExit()
-  end
-
   for i,v in ipairs(self.modifiers) do
     v:onRoundExit()
+  end
+  
+  if self.goal then
+    self.goal:onRoundExit()
   end
 end

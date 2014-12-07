@@ -141,7 +141,12 @@ function CardView:draw(ox, oy)
     if self.selectMode then
 
       if i == self.selection then
-        love.graphics.setColor( 0, 255, 255, 255 )
+        if self.selectedItems[i] then
+          love.graphics.setColor( 127, 255, 127, 255 )
+        else
+          love.graphics.setColor( 0, 255, 255, 255 )
+        end
+
       elseif self.selectedItems[i] then
         love.graphics.setColor( 255, 255, 0, 255 )
       else
@@ -159,6 +164,15 @@ function CardView:draw(ox, oy)
     love.graphics.draw( c.cardSpec.img, 2, 2 )
 
     love.graphics.printf( c.cardSpec.name, 55, 5, 50 )
+
+    if i == self.selection then
+        love.graphics.setColor( 255, 255, 255, 255 )
+        love.graphics.rectangle("fill", self.w, 0, 240, 45)
+        love.graphics.setColor( 0, 0, 0, 255 )
+        love.graphics.rectangle("line", self.w, 0, 240, 45)
+
+        love.graphics.printf(c.cardSpec.desc, self.w + 5, 5, 235 )
+    end
 
     love.graphics.translate( 0, 50 ) 
   end
@@ -274,14 +288,13 @@ function Gui:initialize()
   ruleWindow:addChildren( DynamicLabel:new( 5, 5, 70, function() return "Draw: " .. state.rules.drawCards end ) )
   ruleWindow:addChildren( DynamicLabel:new( 75, 5, 70, function() return "Play: " .. state.rules.playCards end ) )
 
-  ruleWindow:addChildren( DynamicLabel:new( 5, 25, 160, function() return "Goal1: " .. (state.rules.goals[1] or {cardSpec = {name = "none"}}).cardSpec.name end) )
-  ruleWindow:addChildren( DynamicLabel:new( 5, 50, 160, function() 
-      if state.rules.numGoals == 2 then
-        return "Goal2: " .. (state.rules.goals[2] or {cardSpec = {name = "none"}}).cardSpec.name 
-      else
-        return ""
-      end
-    end ) )
+  ruleWindow:addChildren( DynamicLabel:new( 5, 25, 160, function() 
+    if state.rules.goal then
+      return "Goal: " .. state.rules.goal.cardSpec.name .. " " .. state.rules.goal:extraText()
+    else
+      return "Goal: none"
+    end
+  end) )
 
   ruleWindow:addChildren( DynamicLabel:new( 5, 75, 160, function() return "Killed mobs: " .. tostring(state.killedMobs) end ) )
 

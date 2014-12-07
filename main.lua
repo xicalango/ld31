@@ -18,7 +18,6 @@ require("card")
 require("carddeck")
 require("rules")
 
-cardSpecs = require("assets/cardspecs")
 
 require("entity")
 require("snowman")
@@ -37,7 +36,17 @@ global = {
   fullscreen = false
 }
 
+
 function love.load()
+  preloadedImages = {}
+  preloadedImages.unknownImage = love.graphics.newImage( "assets/unknown.png" )
+  preloadedImages[1] = love.graphics.newImage( "assets/1.png" )
+  preloadedImages[2] = love.graphics.newImage( "assets/2.png" )
+  preloadedImages[3] = love.graphics.newImage( "assets/3.png" )
+  preloadedImages[4] = love.graphics.newImage( "assets/4.png" )
+  
+  cardSpecs = require("assets/cardspecs")
+
   gameStateManager = GameStateManager:new()
   gameStateManager:registerState(InGameState)
 
@@ -45,7 +54,6 @@ function love.load()
   
   roundRng = love.math.newRandomGenerator()
 
-  unknownImage = love.graphics.newImage( "assets/unknown.png" )
 end
 
 function love.draw()

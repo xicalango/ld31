@@ -32,11 +32,14 @@ end
 function CardSpec:checkGoalCondition(card, state)
 end
 
+function CardSpec:extraText(card, state)
+  return ""
+end
+
 DrawCardSpec = CardSpec:subclass("DrawCardSpec")
 
-function DrawCardSpec:initialize( num )
-  --CardSpec.initialize( self, "Draw " .. tostring(num), "Draw " .. tostring(num) .. " cards at the beginning of the round.", love.graphics.newImage("assets/" .. tostring(num) .. ".png") )
-  CardSpec.initialize( self, "Draw " .. tostring(num), "rules", "Draw " .. tostring(num) .. " cards at the beginning of the round.", love.graphics.newImage("assets/unknown.png") )
+function DrawCardSpec:initialize( num, initpars )
+  CardSpec.initialize( self, "Draw " .. tostring(num), "rule", "Draw " .. tostring(num) .. " cards at the beginning of the round.", preloadedImages[num], initpars )
   self.num = num
 end
 
@@ -46,9 +49,8 @@ end
 
 PlayCardSpec = CardSpec:subclass("PlayCardSpec")
 
-function PlayCardSpec:initialize( num )
-  --CardSpec.initialize( self, "Play " .. tostring(num), "Play " .. tostring(num) .. " cards at the beginning of the round.", love.graphics.newImage("assets/" .. tostring(num) .. ".png") )
-  CardSpec.initialize( self, "Play " .. tostring(num), "rules", "Play " .. tostring(num) .. " cards at the beginning of the round.", love.graphics.newImage("assets/unknown.png") )
+function PlayCardSpec:initialize( num, initpars )
+  CardSpec.initialize( self, "Play " .. tostring(num), "rule", "Play " .. tostring(num) .. " cards at the beginning of the round.", preloadedImages[num], initpars )
   self.num = num
 end
 
@@ -100,8 +102,10 @@ function Card:onRoundExit()
   self.cardSpec:onRoundExit(self, state)
 end
 
-function Card:checkGoalCondition(card, state)
+function Card:checkGoalCondition()
   return self.cardSpec:checkGoalCondition(self, state)
 end
 
-
+function Card:extraText()
+  return self.cardSpec:extraText( self, state )
+end
