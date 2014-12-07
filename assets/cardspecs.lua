@@ -22,10 +22,24 @@ function cardspecs.heal:onActivation(card, state)
   state.snowman.health = state.snowman.maxHealth
 end
 
+cardspecs.hpdown = CardSpec:new( "Radioactive waste", "action", "Decreases maximum hitpoints by one.", love.graphics.newImage("assets/radioactive.png"), { count = 4 } )
+
+function cardspecs.hpdown:onActivation(card, state)
+  state.snowman.maxHealth = math.max(state.snowman.maxHealth - 1, 1)
+  if state.snowman.health > state.snowman.maxHealth then
+    state.snowman.health = state.snowman.maxHealth
+  end
+end
+
+cardspecs.damage = CardSpec:new( "Biological waste", "action", "Deals one damage", love.graphics.newImage("assets/biohazard.png"), { count = 4 } )
+
+function cardspecs.heal:onActivation(card, state)
+  state.snowman.health = math.max(state.snowman.health - 1, .5)
+end
 
 -- modifier
 
-cardspecs.split = CardSpec:new( "Split", "modifier", "Splits all enemies in half.", unknownImage, { count = 2 } )
+cardspecs.split = CardSpec:new( "Gemini", "modifier", "Splits all enemies in half.", love.graphics.newImage("assets/gemini.png"), { count = 2 } )
 
 function cardspecs.split:onRoundEnter(card, state)
   for _, e in ipairs(state.world.entities) do
@@ -39,7 +53,7 @@ function cardspecs.split:onRoundExit(card, state)
   card.remove = true
 end
 
-cardspecs.dualShot = CardSpec:new( "Gemini", "modifier", "Dual shot.", unknownImage, { count = 2 } )
+cardspecs.dualShot = CardSpec:new( "Cancer", "modifier", "Dual shot.", love.graphics.newImage("assets/cancer.png"), { count = 2 } )
 
 function cardspecs.dualShot:onActivation(card, state)
   state.snowman.dualShot = true
@@ -89,18 +103,18 @@ cardspecs.brownSnow.ballPars.tint = { 127, 127, 0, 255 }
 
 -- weaponmods
 
-cardspecs.wpnSpeedUp = WeaponModCardSpec:new( "Shot speed up", "Snowball speed up", unknownImage, {action = function(w) w.speed = w.speed + 25 end, count = 3} )  
-cardspecs.wpnReloadDown = WeaponModCardSpec:new( "Reload down", "Snowball reload time down", unknownImage, {action = function(w) w.reload = w.reload - .1 end, count = 3} )  
-cardspecs.wpnRangeUp = WeaponModCardSpec:new( "Range up", "Snowball range up", unknownImage, {action = function(w) w.lifeTime = w.lifeTime + .1 end, count = 3} )  
+cardspecs.wpnSpeedUp = WeaponModCardSpec:new( "Shot speed up", "Snowball speed up", love.graphics.newImage("assets/black_club.png"), {action = function(w) w.speed = w.speed + 25 end, count = 3} )  
+cardspecs.wpnReloadDown = WeaponModCardSpec:new( "Reload down", "Snowball reload time down", love.graphics.newImage("assets/black_diamond.png"), {action = function(w) w.reload = w.reload - .1 end, count = 3} )  
+cardspecs.wpnRangeUp = WeaponModCardSpec:new( "Range up", "Snowball range up", love.graphics.newImage("assets/black_spade.png"), {action = function(w) w.lifeTime = w.lifeTime + .1 end, count = 3} )  
 
-cardspecs.wpnSpeedDown = WeaponModCardSpec:new( "Shot speed down", "Snowball speed down", unknownImage, {action = function(w) w.speed = w.speed - 25 end, count = 3} )  
-cardspecs.wpnReloadUp = WeaponModCardSpec:new( "Reload up", "Snowball reload time up", unknownImage, {action = function(w) w.reload = w.reload + .1 end, count = 3} )  
-cardspecs.wpnRangeDown = WeaponModCardSpec:new( "Range down", "Snowball range down", unknownImage, {action = function(w) w.lifeTime = w.lifeTime - .1 end, count = 3} )  
+cardspecs.wpnSpeedDown = WeaponModCardSpec:new( "Shot speed down", "Snowball speed down", love.graphics.newImage("assets/white_club.png"), {action = function(w) w.speed = w.speed - 25 end, count = 3} )  
+cardspecs.wpnReloadUp = WeaponModCardSpec:new( "Reload up", "Snowball reload time up", love.graphics.newImage("assets/white_diamond.png"), {action = function(w) w.reload = w.reload + .1 end, count = 3} )  
+cardspecs.wpnRangeDown = WeaponModCardSpec:new( "Range down", "Snowball range down", love.graphics.newImage("assets/white_spade.png"), {action = function(w) w.lifeTime = w.lifeTime - .1 end, count = 3} )  
 
 -- goals
 
-cardspecs.goalEndurance = CardSpec:new( "Endurance", "goal", "Endure 20 rounds after this card was layed out", unknownImage, { count = 2 } )
-cardspecs.goalEndurance.NUM_ROUNDS = 20
+cardspecs.goalEndurance = CardSpec:new( "Endurance", "goal", "Endure 10 rounds after this card was layed out", unknownImage, { count = 2 } )
+cardspecs.goalEndurance.NUM_ROUNDS = 10
 
 function cardspecs.goalEndurance:onActivation(card, state)
   card.finishedRounds = 0
@@ -118,9 +132,9 @@ function cardspecs.goalEndurance:extraText(card, state)
   return tostring(card.finishedRounds) .. " / " .. tostring(cardspecs.goalEndurance.NUM_ROUNDS)
 end
 
-cardspecs.goalMassacre = CardSpec:new( "Massacre", "goal", "Kill 100 enemys since the beginning of time", unknownImage, { count = 2 } )
+cardspecs.goalMassacre = CardSpec:new( "Massacre", "goal", "Kill 50 enemys since the beginning of time", unknownImage, { count = 2 } )
 
-cardspecs.goalMassacre.NUM_KILLS = 100
+cardspecs.goalMassacre.NUM_KILLS = 50
 
 function cardspecs.goalMassacre:checkGoalCondition(card, state)
   return state.killedMobs >= cardspecs.goalMassacre.NUM_KILLS
@@ -130,8 +144,8 @@ function cardspecs.goalMassacre:extraText(card, state)
   return tostring(state.killedMobs) .. " / " .. tostring(cardspecs.goalMassacre.NUM_KILLS)
 end
 
-cardspecs.goalCollateralDamage = CardSpec:new( "Collateral Damage", "goal", "Kill 50 pawns after this card was layed out", unknownImage, {count = 2}  )
-cardspecs.goalCollateralDamage.NUM_PAWNS = 50
+cardspecs.goalCollateralDamage = CardSpec:new( "Collateral Damage", "goal", "Kill 25 pawns after this card was layed out", unknownImage, {count = 2}  )
+cardspecs.goalCollateralDamage.NUM_PAWNS = 25
 
 function cardspecs.goalCollateralDamage:onActivation(card, state)
   card.killedPawns = 0
@@ -158,7 +172,7 @@ function cardspecs.goalCollateralDamage:extraText(card, state)
   return tostring(card.killedPawns) .. " / " .. tostring(cardspecs.goalCollateralDamage.NUM_PAWNS)
 end
 
-cardspecs.goalKingMurderer = CardSpec:new( "King murderer", "goal", "Kill the King. But: Every king is now a champion", unknownImage, {count = 2} )
+cardspecs.goalKingMurderer = CardSpec:new( "King murderer", "goal", "Kill the King. But: Every king is now a champion", love.graphics.newImage("assets/kingKill.png"), {count = 2} )
 
 function cardspecs.goalKingMurderer:onActivation(card, state)
   state.kingChamps = true
@@ -185,7 +199,7 @@ function cardspecs.goalKingMurderer:checkGoalCondition(card, state)
   return card.hasKing -- had king, survived round
 end
 
-cardspecs.goalRevolution = CardSpec:new( "Viva la revolution", "goal", "Kill the King and the Queen but no pawns.", unknownImage, {count = 2} )
+cardspecs.goalRevolution = CardSpec:new( "Viva la revolution", "goal", "Kill the King and the Queen but no pawns.", love.graphics.newImage("assets/revolution.png"), {count = 2} )
 
 function cardspecs.goalRevolution:onActivation(card, state)
   card.killedKing = false

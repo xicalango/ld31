@@ -82,7 +82,7 @@ function InGameState:reset()
   
   self.deck = CardDeck:new()
   self.cards = self.deck:drawCards(2)
-  table.insert( self.cards, Card:new("wpnReloadDown") )
+  table.insert( self.cards, Card:new("split") )
 
   self.rules = Rules:new()
 
