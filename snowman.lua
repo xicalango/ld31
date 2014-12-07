@@ -51,6 +51,8 @@ function Snowman:update(dt)
         else
           state:shoot( self, w.pars, sx, sy )
         end
+		
+		shootSound:play()
 
         w.reloadTimer = w.pars.reload
       end

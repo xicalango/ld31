@@ -89,6 +89,8 @@ function Mob:update(dt)
         state:shoot( self, self.mobspec.ballpars, toCart( 1, phi ) )
       end
     end
+	
+	enemyShootSound:play()
 
   end
 
@@ -138,6 +140,10 @@ function Mob:onHit(shot)
       self:die()
     end
   end
+end
+
+function Mob:blocks(e)
+	return e.isMob or Entity.blocks(self,e)
 end
 
 function Mob:onCollideWith(e)

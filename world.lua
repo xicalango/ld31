@@ -6,14 +6,18 @@ function World:initialize()
   self.entities = {}
   self.addEntities = {}
 
-  self.createdLocations = {}
+  self:reset()
 end
 
 function World:reset()
   self.createdLocations = {}
+  
+  for i = 0,11 do
+	self.createdLocations[i] = {}
+  end
 
   for i,v in ipairs(self.entities) do
-    if v.isWall then
+    if v.isWall or v.isShot then
       v.remove = true
     end
   end
@@ -21,11 +25,12 @@ end
 
 function World:getNewLocation()
   local tx, ty
+  
   repeat
     tx, ty = love.math.random(0, 11), love.math.random(0, 11)
-  until not ( self.createdLocations[ {tx, ty} ] or ( math.abs(tx - 5) + math.abs(ty - 5) <= 2 ) )
+  until not ( self.createdLocations[tx][ty] or ( math.abs(tx - 5) + math.abs(ty - 5) <= 2 ) )
 
-  self.createdLocations[ {tx, ty} ] = true
+  self.createdLocations[tx][ty] = true
 
   return self:unrasterCoordinate(tx, ty)
 end

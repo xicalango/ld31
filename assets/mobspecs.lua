@@ -21,7 +21,7 @@ local function shootCooldown( pauseRange, cooldown, shotsRange )
 
       if mob.shots <= 0 then
         mob.state = "stand"
-        mob.pauseCounter = love.math.random(pauseRange[1], pauseRange[2])
+        mob.pauseCounter = love.math.random() * (pauseRange[2] - pauseRange[1]) + pauseRange[1]
       else
         mob.cooldown = cooldown
         mob.state = "cooldown"
@@ -40,14 +40,14 @@ local function shootCooldownChase( pauseRange, cooldown, shotsRange, chaseProb )
           mob.shots = love.math.random(shotsRange[1], shotsRange[2])
         else
           mob.state = "chase"
-          mob.pauseCounter = love.math.random(pauseRange[1], pauseRange[2])
+          mob.pauseCounter = love.math.random() * (pauseRange[2] - pauseRange[1]) + pauseRange[1]
         end
       end
 
     elseif mob.state == "chase" then
       mob.pauseCounter = mob.pauseCounter - dt
       if mob.pauseCounter <= 0 then
-        mob.pauseCounter = love.math.random(pauseRange[1], pauseRange[2])
+        mob.pauseCounter = love.math.random() * (pauseRange[2] - pauseRange[1]) + pauseRange[1]
         mob.state = "stand"
       end
 
@@ -62,7 +62,7 @@ local function shootCooldownChase( pauseRange, cooldown, shotsRange, chaseProb )
 
       if mob.shots <= 0 then
         mob.state = "stand"
-        mob.pauseCounter = love.math.random(pauseRange[1], pauseRange[2])
+        mob.pauseCounter = love.math.random() * (pauseRange[2] - pauseRange[1]) + pauseRange[1]
       else
         mob.cooldown = cooldown
         mob.state = "cooldown"
@@ -73,7 +73,7 @@ end
 
 mobs.tower = MobSpec:new( "tower", 0, 3 )
 
-mobs.tower.updateFn = shootCooldown( {.5, 1.3}, .5, {2,4} )
+mobs.tower.updateFn = shootCooldown( {1, 3}, .5, {3,3} )
 mobs.tower.ballpars = BallParameters:new(true)
 mobs.tower.ballpars.chasing = true
 
@@ -109,7 +109,7 @@ end
 mobs.kingChamp = MobSpec:new( "kingChamp", 200, 5 )
 mobs.kingChamp.defaultTint = { 0, 0, 255, 255 }
 mobs.kingChamp.size = 1.5
-mobs.kingChamp.updateFn = shootCooldownChase( {.5, 1}, .3, {3, 6}, .5 )
+mobs.kingChamp.updateFn = shootCooldownChase( {.5, 1.5}, .3, {3, 6}, .5 )
 mobs.kingChamp.touchDamage = 1
 mobs.kingChamp.ballpars = BallParameters:new(true)
 mobs.kingChamp.ballpars.speed = 300
@@ -168,12 +168,12 @@ function mobs.bishop:update(mob, dt)
     end
 
   elseif mob.state == "shoot" then
-    mob.pauseCounter = love.math.random(.5,1.3)
+    mob.pauseCounter = love.math.random() * .5 + 1
     mob.state = "chase"
   end
 end
 
-mobs.knight = MobSpec:new( "knight", 100, 2 )
+mobs.knight = MobSpec:new( "knight", 125, 2 )
 
 function mobs.knight:setup(mob)
   mob.state = "chase"

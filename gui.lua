@@ -14,6 +14,7 @@ function Window:initialize(w, h, x, y)
   self.children = {}
   self.border = false
   self.borderColor = {255, 255, 255}
+
 end
 
 function Window:addChildren(child, label)
@@ -126,6 +127,11 @@ function CardView:initialize(x, y, w, h)
   self.h = h
   self.numCards = math.floor(self.h / 55)
   self.offset = 1
+    
+  self.menuSelectionSound = love.audio.newSource("assets/selectItem.wav", "static")
+  self.itemSelectedSound = love.audio.newSource("assets/itemSelected.wav", "static")
+  self.itemDeselectedSound = love.audio.newSource("assets/itemDeselected.wav", "static")
+  self.notPossibleSound = love.audio.newSource("assets/notPossible.wav", "static")
 end
 
 function CardView:draw(ox, oy)
@@ -181,7 +187,7 @@ function CardView:draw(ox, oy)
           desc = desc .. "New goal: "
         end
 
-        desc = desc .. c.cardSpec.name .. ": " .. c.cardSpec.desc
+        desc = desc .. c.cardSpec.desc
 
         love.graphics.printf(desc, self.w + 5, 5, 235 )
     end
@@ -227,6 +233,8 @@ function CardView:keypressed(key)
         self.offset = self.selection
       end
 
+	  self.menuSelectionSound:play()
+	  
     elseif key == keyconfig.player.down or key == keyconfig.player.sdown then -- down
       self.selection = self.selection + 1
 
@@ -239,16 +247,20 @@ function CardView:keypressed(key)
         self.offset = self.selection - self.numCards
       end
 
+	  self.menuSelectionSound:play()
+
     elseif key == keyconfig.player.select then -- select
       if self.selectedItems[self.selection] then
         self.selectedItems[self.selection] = nil
         self.selectedItemsCount = self.selectedItemsCount - 1
+		self.itemDeselectedSound:play()
       else
         if self.selectedItemsCount == self.num then
-          -- geht ned effekt
+          self.notPossibleSound:play()
         else
           self.selectedItems[self.selection] = true
           self.selectedItemsCount = self.selectedItemsCount + 1
+		  self.itemSelectedSound:play()
         end
       end
     end
@@ -272,6 +284,7 @@ function CardView:setSelectMode(mode, num)
 
   if self.selectMode == true then
     self.selection = 1
+	self.offset = 1
     self.selectedItems = {}
     self.selectedItemsCount = 0
   end

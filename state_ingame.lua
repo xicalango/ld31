@@ -34,7 +34,8 @@ function InGameState:cardsSelected(cards)
     v.removeFromHand = true
   end
 
-  for i,v in ipairs(self.cards) do
+  for i =  #self.cards, 1, -1 do
+	local v = self.cards[i]
     if v.removeFromHand then
       v.removeFromHand = false
       table.remove(self.cards, i)
@@ -56,7 +57,12 @@ function InGameState:cardsSelected(cards)
   end
 
   self.rules:onRoundEnter()
-  self.roundState = InGameState.ROUND_ROUND
+  
+  if self.world:mobCount() == 0 then
+	self.roundState = InGameState.ROUND_END
+  else
+	self.roundState = InGameState.ROUND_ROUND
+  end
 end
 
 
@@ -80,7 +86,23 @@ function InGameState:reset()
   self.world:addEntityRaw( self.snowman )
   
   self.deck = CardDeck:new()
-  self.cards = self.deck:drawCards(2)
+  self.cards = {}
+  
+  for i,v in ipairs(self.deck.drawPile) do
+	if v.cardSpec.category == "goal" then
+		table.insert(self.cards, v)
+		table.remove(self.deck.drawPile, i)
+		break
+	end
+  end
+
+  for i,v in ipairs(self.deck.drawPile) do
+	if v.cardSpec.category == "mob" then
+		table.insert(self.cards, v)
+		table.remove(self.deck.drawPile, i)
+		break
+	end
+  end
 
   self.rules = Rules:new()
 
@@ -117,7 +139,7 @@ function InGameState:update(dt)
     if #self.cards == 0 then
       error("Paniq")
     end
-    
+	
   elseif self.roundState == InGameState.ROUND_ROUND then
     self.world:update(dt)
   elseif self.roundState == InGameState.ROUND_END then
@@ -142,11 +164,17 @@ function InGameState:draw()
   self.gui:draw()
 
   if self.roundState == InGameState.ROUND_BEGIN_DRAW or self.roundState == InGameState.ROUND_BEGIN_PLAY then
-    love.graphics.setFont( self.bigFont )
     withColor( {0, 0, 0, 255}, function()
+	  love.graphics.setFont( self.bigFont )
       love.graphics.print( "Round " .. tostring(self.survivedRounds + 1), 400, 400 )
+      love.graphics.setFont( self.normalFont ) 
+	  local goal = "none"
+	  if self.rules.goal then
+		goal = self.rules.goal.cardSpec.desc
+	  end
+	  love.graphics.print( "Current Goal: " .. goal, 165, 450 )
     end)
-    love.graphics.setFont( self.normalFont ) 
+
   elseif self.roundState == InGameState.ROUND_ROUND and self.world:mobCount() == 0 then
     love.graphics.setFont( self.bigFont )
     withColor( {0, 0, 0, 255}, function()

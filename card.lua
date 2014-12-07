@@ -36,6 +36,19 @@ function CardSpec:extraText(card, state)
   return ""
 end
 
+DrawPlayCardSpec = CardSpec:subclass("DrawPlayCardSpec")
+
+function DrawPlayCardSpec:initialize( numDraw, numPlay, initpars )
+  CardSpec.initialize( self, "Draw " .. tostring(numDraw) .. " Play " .. tostring(numPlay), "rule", "Draw " .. tostring(numDraw) .. " cards and play " .. tostring(numPlay) .. " at the beginning of the round.", preloadedImages[numDraw], initpars )
+  self.numDraw = numDraw
+  self.numPlay = numPlay
+end
+
+function DrawPlayCardSpec:onActivation( card, state )
+  state.rules.drawCards = self.numDraw
+  state.rules.playCards = self.numPlay
+end
+
 DrawCardSpec = CardSpec:subclass("DrawCardSpec")
 
 function DrawCardSpec:initialize( num, initpars )

@@ -5,6 +5,7 @@ class = require("lib/middleclass")
 require("lib/gamestate")
 require("lib/graphics")
 require("lib/util")
+require("lib/slam")
 
 keyconfig = require("keyconfig")
 
@@ -58,6 +59,10 @@ function love.load()
   gameStateManager:changeState(TitleState)
   
   roundRng = love.math.newRandomGenerator()
+  
+  hitSound = love.audio.newSource({"assets/hit1.wav", "assets/hit2.wav"}, "static")
+  shootSound = love.audio.newSource("assets/shoot.wav", "static")
+  enemyShootSound = love.audio.newSource("assets/enemyShoot.wav", "static")
 
 end
 

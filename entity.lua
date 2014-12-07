@@ -108,6 +108,7 @@ end
 
 function Entity:onHit(shot)
   self.hitEffectTime = .5  
+  hitSound:play()
 end
 
 function Entity:die()

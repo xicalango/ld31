@@ -10,10 +10,19 @@ for i = 1, 4 do
   cardspecs["play" .. tostring(i)] = PlayCardSpec:new( i, { count = 4 } )
 end
 
+cardspecs.draw1play1 = DrawPlayCardSpec:new( 1, 1, {count = 8} )
+cardspecs.draw2play1 = DrawPlayCardSpec:new( 2, 1, {count = 8} )
+cardspecs.draw2play2 = DrawPlayCardSpec:new( 2, 2, {count = 8} )
+cardspecs.draw3play2 = DrawPlayCardSpec:new( 3, 2, {count = 8} )
+cardspecs.draw3play3 = DrawPlayCardSpec:new( 3, 3, {count = 8} )
+cardspecs.draw4play3 = DrawPlayCardSpec:new( 4, 3, {count = 8} )
+cardspecs.draw4play4 = DrawPlayCardSpec:new( 4, 4, {count = 8} )
+
 cardspecs.hpup = CardSpec:new( "The Heart++", "action", "Increases maximum hitpoints by one.", love.graphics.newImage("assets/heart_plus.png"), { count = 7 } )
 
 function cardspecs.hpup:onActivation(card, state)
   state.snowman.maxHealth = state.snowman.maxHealth + 1
+  state.snowman.health = state.snowman.maxHealth
 end
 
 cardspecs.heal = CardSpec:new( "The Heart", "action", "Heals you fully.", love.graphics.newImage("assets/heart_big.png"), { count = 9 } )
@@ -33,7 +42,7 @@ end
 
 cardspecs.damage = CardSpec:new( "Biological waste", "action", "Deals one damage to you.", love.graphics.newImage("assets/biohazard.png"), { count = 7 } )
 
-function cardspecs.heal:onActivation(card, state)
+function cardspecs.damage:onActivation(card, state)
   state.snowman.health = math.max(state.snowman.health - 1, .5)
 end
 
@@ -50,7 +59,7 @@ end
 
 -- modifier
 
-cardspecs.split = CardSpec:new( "Gemini", "modifier", "Splits all enemies in half.", love.graphics.newImage("assets/gemini.png"), { count = 7 } )
+cardspecs.split = CardSpec:new( "Gemini", "modifier", "Splits all enemies in half.", love.graphics.newImage("assets/gemini.png"), { count = 10 } )
 
 function cardspecs.split:onRoundEnter(card, state)
   for _, e in ipairs(state.world.entities) do
@@ -64,7 +73,7 @@ function cardspecs.split:onRoundExit(card, state)
   card.remove = true
 end
 
-cardspecs.dualShot = CardSpec:new( "Cancer", "modifier", "Dual shot.", love.graphics.newImage("assets/cancer.png"), { count = 7 } )
+cardspecs.dualShot = CardSpec:new( "Cancer", "modifier", "Dual shot.", love.graphics.newImage("assets/cancer.png"), { count = 10 } )
 
 function cardspecs.dualShot:onActivation(card, state)
   state.snowman.dualShot = true
@@ -83,9 +92,9 @@ end
 cardspecs.king = MobCardSpec:new( "The King", "Spawns King Douche.", love.graphics.newImage("assets/mob_king.png"), { mobName="king", count = 10 } )
 cardspecs.queen = MobCardSpec:new( "The Queen", "Spawns Queen Douche.", love.graphics.newImage("assets/mob_queen.png"), { mobName="queen", count = 10 }  )
 cardspecs.pawn = MobCardSpec:new( "The Pawn", "Spawns 1 to 5 pawns.", love.graphics.newImage("assets/mob_pawn.png"), { mobName="pawn", numRange={1,5}, count = 30 } )
-cardspecs.tower = MobCardSpec:new( "The Tower", "Spawns 1 or 2 towers.", love.graphics.newImage("assets/mob_tower.png"), { mobName="tower", numRange={1,2}, count = 20 } )
+cardspecs.tower = MobCardSpec:new( "The Tower", "Spawns 1 to 3 towers.", love.graphics.newImage("assets/mob_tower.png"), { mobName="tower", numRange={1,3}, count = 20 } )
 cardspecs.bishop = MobCardSpec:new( "The Bishop", "Spawns 1 to 3 bishops.", love.graphics.newImage("assets/mob_bishop.png"), { mobName="bishop", numRange={1,3}, count = 20 } )
-cardspecs.knight = MobCardSpec:new( "The Knight", "Spawns 1 or 2 knights.", love.graphics.newImage("assets/mob_knight.png"), { mobName="knight", numRange={1,2}, count = 20 } )
+cardspecs.knight = MobCardSpec:new( "The Knight", "Spawns 1 to 4 knights.", love.graphics.newImage("assets/mob_knight.png"), { mobName="knight", numRange={1,4}, count = 20 } )
 
 -- weapons
 
@@ -115,12 +124,12 @@ cardspecs.brownSnow.ballPars.tint = { 127, 127, 0, 255 }
 -- weaponmods
 
 cardspecs.wpnSpeedUp = WeaponModCardSpec:new( "Shot speed up", "Snowball speed up", love.graphics.newImage("assets/black_club.png"), {action = function(w) w.speed = w.speed + 25 end, count = 5} )  
-cardspecs.wpnReloadDown = WeaponModCardSpec:new( "Reload down", "Snowball reload time down", love.graphics.newImage("assets/black_diamond.png"), {action = function(w) w.reload = w.reload - .1 end, count = 5} )  
+cardspecs.wpnReloadDown = WeaponModCardSpec:new( "Reload down", "Snowball reload time down", love.graphics.newImage("assets/black_diamond.png"), {action = function(w) w.reload = math.max(w.reload - .1, .1) end, count = 5} )  
 cardspecs.wpnRangeUp = WeaponModCardSpec:new( "Range up", "Snowball range up", love.graphics.newImage("assets/black_spade.png"), {action = function(w) w.lifeTime = w.lifeTime + .1 end, count = 5} )  
 
-cardspecs.wpnSpeedDown = WeaponModCardSpec:new( "Shot speed down", "Snowball speed down", love.graphics.newImage("assets/white_club.png"), {action = function(w) w.speed = w.speed - 25 end, count = 5} )  
+cardspecs.wpnSpeedDown = WeaponModCardSpec:new( "Shot speed down", "Snowball speed down", love.graphics.newImage("assets/white_club.png"), {action = function(w) w.speed = math.min(w.speed - 25, 210) end, count = 5} )  
 cardspecs.wpnReloadUp = WeaponModCardSpec:new( "Reload up", "Snowball reload time up", love.graphics.newImage("assets/white_diamond.png"), {action = function(w) w.reload = w.reload + .1 end, count = 5} )  
-cardspecs.wpnRangeDown = WeaponModCardSpec:new( "Range down", "Snowball range down", love.graphics.newImage("assets/white_spade.png"), {action = function(w) w.lifeTime = w.lifeTime - .1 end, count = 5} )  
+cardspecs.wpnRangeDown = WeaponModCardSpec:new( "Range down", "Snowball range down", love.graphics.newImage("assets/white_spade.png"), {action = function(w) w.lifeTime = math.min(w.lifeTime - .1, .5) end, count = 5} )  
 
 -- goals
 
@@ -198,7 +207,7 @@ function cardspecs.goalKingMurderer:onRoundEnter(card, state)
 
   for i,m in ipairs(state.world.entities) do
     if m.isMob then
-      if m.mobspec.name == "king" then
+      if m.mobspec.name == "kingChamp" then
         card.hasKing = true
         break
       end

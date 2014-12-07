@@ -3,8 +3,8 @@
 Rules = class("Rules")
 
 function Rules:initialize()
-  self.drawCards = 1
-  self.playCards = 1
+  self.drawCards = 2
+  self.playCards = 2
 
   self.goal = nil
 
