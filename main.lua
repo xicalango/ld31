@@ -64,6 +64,16 @@ function love.load()
   shootSound = love.audio.newSource("assets/shoot.wav", "static")
   enemyShootSound = love.audio.newSource("assets/enemyShoot.wav", "static")
 
+  thinkMusic = love.audio.newSource("assets/thinkMusic.ogg", "stream")
+  thinkMusic:setLooping(true)
+  thinkMusic:play()
+  thinkMusic:pause()
+  
+  fightMusic = love.audio.newSource("assets/fightMusic.ogg", "stream")
+  fightMusic:setLooping(true)
+  fightMusic:play()
+  fightMusic:pause()
+  
 end
 
 function love.draw()

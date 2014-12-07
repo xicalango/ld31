@@ -46,7 +46,7 @@ function cardspecs.damage:onActivation(card, state)
   state.snowman.health = math.max(state.snowman.health - 1, .5)
 end
 
-cardspecs.wall = CardSpec:new( "The Wall", "action", "Builds 1 to 4 random walls.", love.graphics.newImage("assets/wall.png"), { count = 7 } )
+cardspecs.wall = CardSpec:new( "The Wall", "action", "Builds 1 to 4 random walls.", love.graphics.newImage("assets/wall.png"), { count = 9 } )
 
 function cardspecs.wall:onActivation(card, state)
   local num = love.math.random(1,4)

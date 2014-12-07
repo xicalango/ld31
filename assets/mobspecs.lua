@@ -106,7 +106,7 @@ function mobs.king:update(mob, dt)
   self:updateFn(mob,dt)
 end
 
-mobs.kingChamp = MobSpec:new( "kingChamp", 200, 5 )
+mobs.kingChamp = MobSpec:new( "kingChamp", 200, 7 )
 mobs.kingChamp.defaultTint = { 0, 0, 255, 255 }
 mobs.kingChamp.size = 1.5
 mobs.kingChamp.updateFn = shootCooldownChase( {.5, 1.5}, .3, {3, 6}, .5 )

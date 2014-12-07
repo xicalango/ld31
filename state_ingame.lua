@@ -61,6 +61,10 @@ function InGameState:cardsSelected(cards)
   if self.world:mobCount() == 0 then
 	self.roundState = InGameState.ROUND_END
   else
+
+	thinkMusic:pause(0)
+	fightMusic:resume(1)
+
 	self.roundState = InGameState.ROUND_ROUND
   end
 end
@@ -135,6 +139,10 @@ function InGameState:update(dt)
     self.roundState = InGameState.ROUND_BEGIN_PLAY
     self.gui:setSelectMode(true, math.min(self.rules.playCards, #self.cards ))
 
+	thinkMusic:resume()
+	fightMusic:pause()
+
+
   elseif self.roundState == InGameState.ROUND_BEGIN_PLAY then
     if #self.cards == 0 then
       error("Paniq")
@@ -143,6 +151,7 @@ function InGameState:update(dt)
   elseif self.roundState == InGameState.ROUND_ROUND then
     self.world:update(dt)
   elseif self.roundState == InGameState.ROUND_END then
+	
     self.survivedRounds = self.survivedRounds + 1
     self.rules:onRoundExit()
 
