@@ -75,8 +75,6 @@ function MobCardSpec:onActivation(card, state)
 
   local mobName = self.mobName
   
-  print(state.kingChamps)
-
   if self.mobName == "king" and state.kingChamps then
     mobName = "kingChamp"
   end

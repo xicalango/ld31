@@ -163,7 +163,7 @@ function CardView:draw(ox, oy)
     love.graphics.rectangle("line", 0, 0, 45, 45)
     love.graphics.draw( c.cardSpec.img, 2, 2 )
 
-    love.graphics.printf( c.cardSpec.name, 55, 5, 50 )
+    love.graphics.printf( c.cardSpec.name, 55, 5, 55 )
 
     if self.selectMode and i == self.selection then
         love.graphics.setColor( 255, 255, 255, 255 )
@@ -181,7 +181,7 @@ function CardView:draw(ox, oy)
           desc = desc .. "New goal: "
         end
 
-        desc = desc .. c.cardSpec.desc
+        desc = desc .. c.cardSpec.name .. ": " .. c.cardSpec.desc
 
         love.graphics.printf(desc, self.w + 5, 5, 235 )
     end
@@ -300,7 +300,7 @@ function Gui:initialize()
 
   self.cardView = cardViewWindow:addChildren( CardView:new(0, 0, 160, 255) )
 
-  local ruleWindow = self.window:addChildren( Window:new(160, 75, 0, 305) )
+  local ruleWindow = self.window:addChildren( Window:new(160, 75, 0, 425) )
 
   ruleWindow:addChildren( DynamicLabel:new( 5, 5, 70, function() return "Draw: " .. state.rules.drawCards end ) )
   ruleWindow:addChildren( DynamicLabel:new( 75, 5, 70, function() return "Play: " .. state.rules.playCards end ) )
@@ -315,12 +315,19 @@ function Gui:initialize()
 
   ruleWindow:addChildren( DynamicLabel:new( 5, 75, 160, function() return "Killed mobs: " .. tostring(state.killedMobs) end ) )
 
-  local messagesWindow = self.window:addChildren( Window:new( 160, 55, 0, 480 - 55 ), "messages" )
+  local messagesWindow = self.window:addChildren( Window:new( 160, 55, 0, 305 ), "messages" )
   messagesWindow.border = true
   messagesWindow:addChildren( DynamicLabel:new( 10, 10, 140, function() 
     
     if state.roundState == InGameState.ROUND_BEGIN_PLAY then
-      return "Select cards: " .. tostring(self.cardView.selectedItemsCount) .. "/" .. tostring(self.cardView.num)
+      local text = "Select cards: " .. tostring(self.cardView.selectedItemsCount) .. "/" .. tostring(self.cardView.num)
+
+      if self.cardView.selectedItemsCount == self.cardView.num then
+        text = text .. " Press [" .. keyconfig.player.accept .. "] to begin round!"
+      end
+
+      return text
+
     elseif state.roundState == InGameState.ROUND_ROUND then
       local mobCount = state.world:mobCount()
       if mobCount == 0 then

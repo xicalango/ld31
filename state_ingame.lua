@@ -82,7 +82,7 @@ function InGameState:reset()
   
   self.deck = CardDeck:new()
   self.cards = self.deck:drawCards(2)
-  table.insert( self.cards, Card:new("split") )
+  table.insert( self.cards, Card:new("wall") )
 
   self.rules = Rules:new()
 
@@ -129,6 +129,7 @@ function InGameState:update(dt)
       self.snowman.x = 220
       self.snowman.y = 220
       self.roundState = InGameState.ROUND_BEGIN_DRAW
+      self.world:reset()
     end
   else
     error(self.roundState)

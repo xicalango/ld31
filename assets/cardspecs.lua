@@ -6,11 +6,11 @@ local unknownImage = love.graphics.newImage("assets/unknown.png")
 -- rules/actions
 
 for i = 1, 4 do
-  cardspecs["draw" .. tostring(i)] = DrawCardSpec:new( i, { count = 2 } )
-  cardspecs["play" .. tostring(i)] = PlayCardSpec:new( i, { count = 2 } )
+  cardspecs["draw" .. tostring(i)] = DrawCardSpec:new( i, { count = 4 } )
+  cardspecs["play" .. tostring(i)] = PlayCardSpec:new( i, { count = 4 } )
 end
 
-cardspecs.hpup = CardSpec:new( "The Heart++", "action", "Increases maximum hitpoints by one.", love.graphics.newImage("assets/heart_plus.png"), { count = 4 } )
+cardspecs.hpup = CardSpec:new( "The Heart++", "action", "Increases maximum hitpoints by one.", love.graphics.newImage("assets/heart_plus.png"), { count = 3 } )
 
 function cardspecs.hpup:onActivation(card, state)
   state.snowman.maxHealth = state.snowman.maxHealth + 1
@@ -22,7 +22,7 @@ function cardspecs.heal:onActivation(card, state)
   state.snowman.health = state.snowman.maxHealth
 end
 
-cardspecs.hpdown = CardSpec:new( "Radioactive waste", "action", "Decreases maximum hitpoints by one.", love.graphics.newImage("assets/radioactive.png"), { count = 4 } )
+cardspecs.hpdown = CardSpec:new( "Radioactive waste", "action", "Decreases maximum hitpoints by one.", love.graphics.newImage("assets/radioactive.png"), { count = 3 } )
 
 function cardspecs.hpdown:onActivation(card, state)
   state.snowman.maxHealth = math.max(state.snowman.maxHealth - 1, 1)
@@ -31,15 +31,26 @@ function cardspecs.hpdown:onActivation(card, state)
   end
 end
 
-cardspecs.damage = CardSpec:new( "Biological waste", "action", "Deals one damage", love.graphics.newImage("assets/biohazard.png"), { count = 4 } )
+cardspecs.damage = CardSpec:new( "Biological waste", "action", "Deals one damage to you.", love.graphics.newImage("assets/biohazard.png"), { count = 4 } )
 
 function cardspecs.heal:onActivation(card, state)
   state.snowman.health = math.max(state.snowman.health - 1, .5)
 end
 
+cardspecs.wall = CardSpec:new( "The Wall", "action", "Builds 1 to 4 random walls.", love.graphics.newImage("assets/wall.png"), { count = 4 } )
+
+function cardspecs.wall:onActivation(card, state)
+  local num = love.math.random(1,4)
+
+  for i = 1, num do
+    local px, py = state.world:getNewLocation()
+    state.world:addEntityRaw( Wall:new( px, py ) )
+  end
+end
+
 -- modifier
 
-cardspecs.split = CardSpec:new( "Gemini", "modifier", "Splits all enemies in half.", love.graphics.newImage("assets/gemini.png"), { count = 2 } )
+cardspecs.split = CardSpec:new( "Gemini", "modifier", "Splits all enemies in half.", love.graphics.newImage("assets/gemini.png"), { count = 4 } )
 
 function cardspecs.split:onRoundEnter(card, state)
   for _, e in ipairs(state.world.entities) do
@@ -53,7 +64,7 @@ function cardspecs.split:onRoundExit(card, state)
   card.remove = true
 end
 
-cardspecs.dualShot = CardSpec:new( "Cancer", "modifier", "Dual shot.", love.graphics.newImage("assets/cancer.png"), { count = 2 } )
+cardspecs.dualShot = CardSpec:new( "Cancer", "modifier", "Dual shot.", love.graphics.newImage("assets/cancer.png"), { count = 4 } )
 
 function cardspecs.dualShot:onActivation(card, state)
   state.snowman.dualShot = true
@@ -69,12 +80,12 @@ end
 
 -- mobs
 
-cardspecs.king = MobCardSpec:new( "The King", "A tough enemy.", love.graphics.newImage("assets/mob_king.png"), { mobName="king", count = 4 } )
-cardspecs.queen = MobCardSpec:new( "The Queen", "A tough enemy.", love.graphics.newImage("assets/mob_queen.png"), { mobName="queen", count = 4 }  )
-cardspecs.pawn = MobCardSpec:new( "The Pawn", "An easy enemy.", love.graphics.newImage("assets/mob_pawn.png"), { mobName="pawn", numRange={1,5}, count = 6 } )
-cardspecs.tower = MobCardSpec:new( "The Tower", "An easy enemy.", love.graphics.newImage("assets/mob_tower.png"), { mobName="tower", numRange={1,2}, count = 5 } )
-cardspecs.bishop = MobCardSpec:new( "The Bishop", "An easy enemy.", love.graphics.newImage("assets/mob_bishop.png"), { mobName="bishop", numRange={1,3}, count = 5 } )
-cardspecs.knight = MobCardSpec:new( "The Knight", "An easy enemy.", love.graphics.newImage("assets/mob_knight.png"), { mobName="knight", numRange={1,2}, count = 5 } )
+cardspecs.king = MobCardSpec:new( "The King", "Spawns King Douche.", love.graphics.newImage("assets/mob_king.png"), { mobName="king", count = 4 } )
+cardspecs.queen = MobCardSpec:new( "The Queen", "Spawns Queen Douche.", love.graphics.newImage("assets/mob_queen.png"), { mobName="queen", count = 4 }  )
+cardspecs.pawn = MobCardSpec:new( "The Pawn", "Spawns 1 to 5 pawns.", love.graphics.newImage("assets/mob_pawn.png"), { mobName="pawn", numRange={1,5}, count = 6 } )
+cardspecs.tower = MobCardSpec:new( "The Tower", "Spawns 1 or 2 towers.", love.graphics.newImage("assets/mob_tower.png"), { mobName="tower", numRange={1,2}, count = 5 } )
+cardspecs.bishop = MobCardSpec:new( "The Bishop", "Spawns 1 to 3 bishops.", love.graphics.newImage("assets/mob_bishop.png"), { mobName="bishop", numRange={1,3}, count = 5 } )
+cardspecs.knight = MobCardSpec:new( "The Knight", "Spawns 1 or 2 knights.", love.graphics.newImage("assets/mob_knight.png"), { mobName="knight", numRange={1,2}, count = 5 } )
 
 -- weapons
 

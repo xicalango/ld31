@@ -127,6 +127,7 @@ end
 
 function mobs.kingChamp:update(mob, dt)
   self:updateFn(mob,dt)
+  self.ballpars.chasing = not self.ballpars.chasing
 end
 
 mobs.queen = MobSpec:new( "queen", 200, 3 )
@@ -135,8 +136,8 @@ mobs.queen.touchDamage = 1
 mobs.queen.ballpars = BallParameters:new(true)
 mobs.queen.ballpars.pattern = function(mob, state)
   local phi
-  for i = 1, 10 do
-    phi = i / 10 * 2 * math.pi
+  for i = 1, 12 do
+    phi = i / 12 * 2 * math.pi
     state:shoot( mob, mob.mobspec.ballpars, toCart( 1, phi ) )
   end
 end
@@ -149,8 +150,7 @@ function mobs.queen:update(mob, dt)
   self:updateFn(mob,dt)
 end
 
-mobs.bishop = MobSpec:new( "bishop", 0, 3 )
-mobs.bishop.updateFn = shootCooldownChase( {1,3}, .5, {3, 6}, .3 )
+mobs.bishop = MobSpec:new( "bishop", 75, 3 )
 mobs.bishop.ballpars = BallParameters:new(true)
 
 function mobs.bishop:setup(mob)
@@ -158,7 +158,19 @@ function mobs.bishop:setup(mob)
 end
 
 function mobs.bishop:update(mob, dt)
-  self:updateFn(mob, dt)
+  if mob.state == "stand" then
+    mob.state = "chase"
+
+  elseif mob.state == "chase" then
+    mob.pauseCounter = mob.pauseCounter - dt
+    if mob.pauseCounter <= 0 then
+      mob.state = "shoot"
+    end
+
+  elseif mob.state == "shoot" then
+    mob.pauseCounter = love.math.random(1,3)
+    mob.state = "chase"
+  end
 end
 
 mobs.knight = MobSpec:new( "knight", 100, 2 )

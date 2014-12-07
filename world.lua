@@ -11,6 +11,12 @@ end
 
 function World:reset()
   self.createdLocations = {}
+
+  for i,v in ipairs(self.entities) do
+    if v.isWall then
+      v.remove = true
+    end
+  end
 end
 
 function World:getNewLocation()

@@ -79,7 +79,7 @@ function Ball:update(dt)
 end
 
 function Ball:onCollideWith(e)
-  if e ~= self.owner and not e.isShot then
+  if e ~= self.owner and not e.isShot and not (self.owner.isMob and e.isMob) then
     if type(e) == "table" then
       e:onHit(self)
     end
