@@ -107,6 +107,8 @@ function mobs.king:update(mob, dt)
 end
 
 mobs.kingChamp = MobSpec:new( "kingChamp", 200, 5 )
+mobs.kingChamp.defaultTint = { 0, 0, 255, 255 }
+mobs.kingChamp.size = 1.5
 mobs.kingChamp.updateFn = shootCooldownChase( {.5, 1}, .3, {3, 6}, .5 )
 mobs.kingChamp.touchDamage = 1
 mobs.kingChamp.ballpars = BallParameters:new(true)
@@ -148,7 +150,7 @@ function mobs.queen:update(mob, dt)
 end
 
 mobs.bishop = MobSpec:new( "bishop", 0, 3 )
-mobs.bishop.updateFn = shootCooldown( {2,6}, .5, {3, 6} )
+mobs.bishop.updateFn = shootCooldownChase( {1,3}, .5, {3, 6}, .3 )
 mobs.bishop.ballpars = BallParameters:new(true)
 
 function mobs.bishop:setup(mob)

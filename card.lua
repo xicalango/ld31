@@ -10,7 +10,7 @@ function CardSpec:initialize( name, category, desc, img, initPars )
   self.category = category
   self.img = img
   self.desc = desc or "A random thingy thing"
-  self.count = initPars.count or 10
+  self.count = initPars.count or 2
   self.effectTime = initPars.effectTime or "room"
 end
 
@@ -85,6 +85,30 @@ function MobCardSpec:onActivation(card, state)
     cx, cy = state.world:getNewLocation()
     state.world:addEntityRaw( Mob:new( cx, cy, mobName ) )
   end
+end
+
+WeaponCardSpec = CardSpec:subclass("WeaponCardSpec")
+
+function WeaponCardSpec:initialize( name, desc, img, initPars )
+  CardSpec.initialize( self, name, "weapon", desc, img, initPars )
+  
+  self.ballPars = BallParameters:new( false )
+end
+
+function WeaponCardSpec:onActivation(card, state)
+  state.snowman.weapons[1] = { reloadTimer = 0, pars = self.ballPars:clone() } 
+end
+
+WeaponModCardSpec = CardSpec:subclass("WeaponModCardSpec")
+
+function WeaponModCardSpec:initialize( name, desc, img, initPars )
+  CardSpec.initialize( self, name, "weaponmod", desc, img, initPars )
+  
+  self.action = initPars.action
+end
+
+function WeaponModCardSpec:onActivation(card, state)
+  self.action(state.snowman.weapons[1].pars)
 end
 
 Card = class("Card")

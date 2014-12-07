@@ -18,6 +18,9 @@ function InGameState:initialize()
       self:cardsSelected(cards)
     end
 
+  self.bigFont = love.graphics.newFont( 40 )
+  self.normalFont = love.graphics.getFont()
+
   self:reset()
 end
 
@@ -79,8 +82,7 @@ function InGameState:reset()
   
   self.deck = CardDeck:new()
   self.cards = self.deck:drawCards(2)
-  table.insert( self.cards, Card:new("goalKingMurderer") )
-  table.insert( self.cards, Card:new("king") )
+  table.insert( self.cards, Card:new("wpnReloadDown") )
 
   self.rules = Rules:new()
 
@@ -116,6 +118,7 @@ function InGameState:update(dt)
   elseif self.roundState == InGameState.ROUND_ROUND then
     self.world:update(dt)
   elseif self.roundState == InGameState.ROUND_END then
+    self.survivedRounds = self.survivedRounds + 1
     self.rules:onRoundExit()
 
     if self.rules:checkGoals() then
@@ -135,6 +138,20 @@ end
 function InGameState:draw()
   self.camera:draw( self.viewport, self.world )
   self.gui:draw()
+
+  if self.roundState == InGameState.ROUND_BEGIN_DRAW or self.roundState == InGameState.ROUND_BEGIN_PLAY then
+    love.graphics.setFont( self.bigFont )
+    withColor( {0, 0, 0, 255}, function()
+      love.graphics.print( "Round " .. tostring(self.survivedRounds + 1), 400, 400 )
+    end)
+    love.graphics.setFont( self.normalFont ) 
+  elseif self.roundState == InGameState.ROUND_ROUND and self.world:mobCount() == 0 then
+    love.graphics.setFont( self.bigFont )
+    withColor( {0, 0, 0, 255}, function()
+      love.graphics.print( "Round " .. tostring(self.survivedRounds + 1) .. " completed" , 200, 400 )
+    end)
+    love.graphics.setFont( self.normalFont ) 
+  end
 end
 
 function InGameState:addKilledMob(mob)

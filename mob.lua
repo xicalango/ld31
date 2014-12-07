@@ -18,6 +18,7 @@ function MobSpec:initialize( name, speed, health )
   self.health = health
   self.touchDamage = 1
   self.defaultTint = {0, 0, 0, 255}
+  self.size = 1
 end
 
 function MobSpec:setup(mob)
@@ -37,7 +38,7 @@ function Mob:initialize(x, y, name, size, weaken)
   Entity.initialize( self, x, y )
   self.mobspec = mobspecs[name]
 
-  self.size = size or 1 
+  self.size = size or self.mobspec.size 
   self.weaken = weaken or 1
 
   self:initGraphics(self.mobspec.name)
@@ -50,6 +51,8 @@ function Mob:initialize(x, y, name, size, weaken)
   self.state = "stand"
 
   self.mobspec:setup(self)
+
+  self.hitAnimationTimer = 0
 end
 
 function Mob:initGraphics(name)
@@ -89,6 +92,10 @@ function Mob:update(dt)
 
   end
 
+  if self.hitAnimationTimer > 0 then
+    self.hitAnimationTimer = self.hitAnimationTimer - dt
+  end
+
   self.mobspec:update(self, dt)
 end
 
@@ -102,6 +109,19 @@ function Mob:split()
   self.remove = true
 end
 
+function Mob:draw()
+
+  if self.hitAnimationTimer > 0 then
+    local oldTint = self.graphics.tint[1]
+    self.graphics.tint[1] = self.hitAnimationTimer * 255
+    Entity.draw(self)
+    self.graphics.tint[1] = oldTint
+  else
+    Entity.draw(self)
+  end
+  
+end
+
 function Mob:die()
   state:addKilledMob(self)
   Entity.die(self)
@@ -111,6 +131,8 @@ function Mob:onHit(shot)
   if not shot.owner.isMob then
     Entity.onHit(self, shot)
     self.health = self.health - shot.pars.dmg
+
+    self.hitAnimationTimer = 1
 
     if self.health <= 0 then
       self:die()
