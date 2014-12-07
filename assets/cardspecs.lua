@@ -124,7 +124,7 @@ cardspecs.wpnRangeDown = WeaponModCardSpec:new( "Range down", "Snowball range do
 
 -- goals
 
-cardspecs.goalEndurance = CardSpec:new( "Endurance", "goal", "Endure 10 rounds after this card was layed out", unknownImage, { count = 2 } )
+cardspecs.goalEndurance = CardSpec:new( "Endurance", "goal", "Endure 10 rounds after this card was layed out", love.graphics.newImage("assets/watch.png"), { count = 2 } )
 cardspecs.goalEndurance.NUM_ROUNDS = 10
 
 function cardspecs.goalEndurance:onActivation(card, state)
@@ -143,7 +143,7 @@ function cardspecs.goalEndurance:extraText(card, state)
   return tostring(card.finishedRounds) .. " / " .. tostring(cardspecs.goalEndurance.NUM_ROUNDS)
 end
 
-cardspecs.goalMassacre = CardSpec:new( "Massacre", "goal", "Kill 50 enemys since the beginning of time", unknownImage, { count = 2 } )
+cardspecs.goalMassacre = CardSpec:new( "Massacre", "goal", "Kill 50 enemys since the beginning of time", love.graphics.newImage("assets/massacre.png"), { count = 2 } )
 
 cardspecs.goalMassacre.NUM_KILLS = 50
 
@@ -155,7 +155,7 @@ function cardspecs.goalMassacre:extraText(card, state)
   return tostring(state.killedMobs) .. " / " .. tostring(cardspecs.goalMassacre.NUM_KILLS)
 end
 
-cardspecs.goalCollateralDamage = CardSpec:new( "Collateral Damage", "goal", "Kill 25 pawns after this card was layed out", unknownImage, {count = 2}  )
+cardspecs.goalCollateralDamage = CardSpec:new( "Collateral Damage", "goal", "Kill 25 pawns after this card was layed out", love.graphics.newImage("assets/collateralDamage.png"), {count = 2}  )
 cardspecs.goalCollateralDamage.NUM_PAWNS = 25
 
 function cardspecs.goalCollateralDamage:onActivation(card, state)

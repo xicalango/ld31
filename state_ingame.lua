@@ -82,7 +82,6 @@ function InGameState:reset()
   
   self.deck = CardDeck:new()
   self.cards = self.deck:drawCards(2)
-  table.insert( self.cards, Card:new("wall") )
 
   self.rules = Rules:new()
 
