@@ -269,11 +269,28 @@ function Gui:initialize()
 
   self.cardView = cardViewWindow:addChildren( CardView:new(0, 0, 160, 255) )
 
-  local messagesWindow = self.window:addChildren( Window:new( 160, 50, 0, 480 - 55 ), "messages" )
+  local ruleWindow = self.window:addChildren( Window:new(160, 75, 0, 305) )
+
+  ruleWindow:addChildren( DynamicLabel:new( 5, 5, 70, function() return "Draw: " .. state.rules.drawCards end ) )
+  ruleWindow:addChildren( DynamicLabel:new( 75, 5, 70, function() return "Play: " .. state.rules.playCards end ) )
+
+  ruleWindow:addChildren( DynamicLabel:new( 5, 25, 160, function() return "Goal1: " .. (state.rules.goals[1] or {cardSpec = {name = "none"}}).cardSpec.name end) )
+  ruleWindow:addChildren( DynamicLabel:new( 5, 50, 160, function() 
+      if state.rules.numGoals == 2 then
+        return "Goal2: " .. (state.rules.goals[2] or {cardSpec = {name = "none"}}).cardSpec.name 
+      else
+        return ""
+      end
+    end ) )
+
+  ruleWindow:addChildren( DynamicLabel:new( 5, 75, 160, function() return "Killed mobs: " .. tostring(state.killedMobs) end ) )
+
+  local messagesWindow = self.window:addChildren( Window:new( 160, 55, 0, 480 - 55 ), "messages" )
+  messagesWindow.border = true
   messagesWindow:addChildren( DynamicLabel:new( 10, 10, 140, function() 
     
     if state.roundState == InGameState.ROUND_BEGIN_PLAY then
-      return "Select cards: " .. tostring(self.cardView.selectedItemsCount) .. "/" .. tostring(state.rules.playCards)
+      return "Select cards: " .. tostring(self.cardView.selectedItemsCount) .. "/" .. tostring(self.cardView.num)
     elseif state.roundState == InGameState.ROUND_ROUND then
       local mobCount = state.world:mobCount()
       if mobCount == 0 then

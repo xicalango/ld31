@@ -44,6 +44,10 @@ function World:addEntity(e)
   table.insert(self.addEntities, e)
 end
 
+function World:addEntityRaw(e)
+  table.insert(self.entities, e)
+end
+
 function World:unrasterCoordinate(x, y)
   return x * 40 + 20, y * 40 + 20
 end

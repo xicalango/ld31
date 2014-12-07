@@ -4,7 +4,7 @@ Rules = class("Rules")
 
 function Rules:initialize()
   self.drawCards = 1
-  self.playCards = 1
+  self.playCards = 4
 
   self.goals = {}
   self.numGoals = 1
@@ -46,4 +46,24 @@ function Rules:checkGoals()
   end
 
   return false
+end
+
+function Rules:onRoundEnter()
+  for i,v in ipairs(self.goals) do
+    v:onRoundEnter()
+  end
+
+  for i,v in ipairs(self.modifiers) do
+    v:onRoundEnter()
+  end
+end
+
+function Rules:onRoundExit()
+  for i,v in ipairs(self.goals) do
+    v:onRoundExit()
+  end
+
+  for i,v in ipairs(self.modifiers) do
+    v:onRoundExit()
+  end
 end

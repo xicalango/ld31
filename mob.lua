@@ -31,6 +31,11 @@ function Mob:initGraphics(name)
   self.graphics.tint = self.mobspec.defaultTint
 end
 
+function Mob:die()
+  state:addKilledMob(self)
+  Entity.die(self)
+end
+
 function Mob:onHit(shot)
   Entity.onHit(self, shot)
   self.health = self.health - shot.pars.dmg

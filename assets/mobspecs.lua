@@ -8,7 +8,7 @@ return {
   king = {
     name = "king",
     speed = 200,
-    health = 3,
+    health = 1,
     defaultTint = {0, 0, 0, 255}
   },
   queen = {

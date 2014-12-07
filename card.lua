@@ -2,6 +2,8 @@
 
 CardSpec = class("CardSpec")
 
+CardSpec.UNKNOWN_IMAGE = love.graphics.newImage("assets/unknown.png")
+
 function CardSpec:initialize( name, category, desc, img, initPars )
   initPars = initPars or {}
   self.name = name
@@ -30,6 +32,30 @@ end
 function CardSpec:checkGoalCondition(card, state)
 end
 
+DrawCardSpec = CardSpec:subclass("DrawCardSpec")
+
+function DrawCardSpec:initialize( num )
+  --CardSpec.initialize( self, "Draw " .. tostring(num), "Draw " .. tostring(num) .. " cards at the beginning of the round.", love.graphics.newImage("assets/" .. tostring(num) .. ".png") )
+  CardSpec.initialize( self, "Draw " .. tostring(num), "rules", "Draw " .. tostring(num) .. " cards at the beginning of the round.", love.graphics.newImage("assets/unknown.png") )
+  self.num = num
+end
+
+function DrawCardSpec:onActivation( card, state )
+  state.rules.drawCards = self.num
+end
+
+PlayCardSpec = CardSpec:subclass("PlayCardSpec")
+
+function PlayCardSpec:initialize( num )
+  --CardSpec.initialize( self, "Play " .. tostring(num), "Play " .. tostring(num) .. " cards at the beginning of the round.", love.graphics.newImage("assets/" .. tostring(num) .. ".png") )
+  CardSpec.initialize( self, "Play " .. tostring(num), "rules", "Play " .. tostring(num) .. " cards at the beginning of the round.", love.graphics.newImage("assets/unknown.png") )
+  self.num = num
+end
+
+function PlayCardSpec:onActivation( card, state )
+  state.rules.playCards = self.num
+end
+
 MobCardSpec = CardSpec:subclass("MobCardSpec")
 
 function MobCardSpec:initialize( name, desc, img, initPars )
@@ -45,7 +71,7 @@ function MobCardSpec:onActivation(card, state)
 
   for i = 1, num do
     cx, cy = state.world:getNewLocation()
-    state.world:addEntity( Mob:new( cx, cy, self.mobName ) )
+    state.world:addEntityRaw( Mob:new( cx, cy, self.mobName ) )
   end
 end
 
@@ -75,7 +101,7 @@ function Card:onRoundExit()
 end
 
 function Card:checkGoalCondition(card, state)
-  self.cardSpec:checkGoalCondition(self, state)
+  return self.cardSpec:checkGoalCondition(self, state)
 end
 
 

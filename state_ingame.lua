@@ -44,15 +44,17 @@ function InGameState:cardsSelected(cards)
     self:activateCard(v)
   end
 
+  self.rules:onRoundEnter()
   self.roundState = InGameState.ROUND_ROUND
 end
 
+
 function InGameState:activateCard( card )
 
-  if card.cardSpec.category == "mob" then
-    card:onActivation()
-  elseif card.cardSpec.category == "goal" then
+  if card.cardSpec.category == "goal" then
     self.rules:addGoal(card)
+  else
+    card:onActivation()
   end
 
 end
@@ -69,6 +71,8 @@ function InGameState:reset()
   self.rules = Rules:new()
 
   self.roundState = InGameState.ROUND_BEGIN_DRAW
+
+  self.killedMobs = 0
 end
 
 function InGameState:update(dt)
@@ -81,7 +85,8 @@ function InGameState:update(dt)
     end
 
     self.roundState = InGameState.ROUND_BEGIN_PLAY
-    self.gui:setSelectMode(true, self.rules.playCards)
+    self.gui:setSelectMode(true, math.min(self.rules.playCards, #self.cards ))
+
   elseif self.roundState == InGameState.ROUND_BEGIN_PLAY then
     if #self.cards == 0 then
       error("Paniq")
@@ -90,7 +95,10 @@ function InGameState:update(dt)
   elseif self.roundState == InGameState.ROUND_ROUND then
     self.world:update(dt)
   elseif self.roundState == InGameState.ROUND_END then
+    self.rules:onRoundExit()
+
     if self.rules:checkGoals() then
+      print("won")
       -- yippeea won!
       error("this is not an error =)")
     else
@@ -106,6 +114,10 @@ end
 function InGameState:draw()
   self.camera:draw( self.viewport, self.world )
   self.gui:draw()
+end
+
+function InGameState:addKilledMob(mob)
+  self.killedMobs = self.killedMobs + 1
 end
 
 function InGameState:mousepressed(x, y, button)

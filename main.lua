@@ -44,6 +44,8 @@ function love.load()
   gameStateManager:changeState(InGameState)
   
   roundRng = love.math.newRandomGenerator()
+
+  unknownImage = love.graphics.newImage( "assets/unknown.png" )
 end
 
 function love.draw()
