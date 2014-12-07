@@ -17,6 +17,12 @@ function CardDeck:initialize()
   self:shuffle()
 end
 
+function CardDeck:print()
+  for i,v in ipairs(self.drawPile) do
+    print(v.name)
+  end
+end
+
 function CardDeck:shuffle()
   for _ = 1, #self.drawPile * 4 do
     local nr1 = love.math.random(1, #self.drawPile)

@@ -30,7 +30,8 @@ require("state_title")
 require("state_gameover")
 
 debug = {
-  drawHitboxes = false
+  drawHitboxes = false,
+  cheats = true
 }
 
 global = {
@@ -52,7 +53,7 @@ function love.load()
   gameStateManager = GameStateManager:new()
   gameStateManager:registerState(InGameState)
   gameStateManager:registerState(TitleState)
-  --gameStateManager:registerState(InGameState)
+  gameStateManager:registerState(GameOverState)
 
   gameStateManager:changeState(TitleState)
   

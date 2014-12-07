@@ -199,7 +199,7 @@ function Snowman:decreaseHealth(amt)
     self.health = self.health - amt
 
     if self.health <= 0 then
-      state:gameOver()
+      state:gameOver(false)
     end
 
     self.invincibilityTimer = 1

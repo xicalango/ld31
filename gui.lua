@@ -282,15 +282,21 @@ Gui = class("Gui")
 function Gui:initialize()
   self.window = Window:new( 160, 480, 0, 0 )
 
-  local ballParsWindow = self.window:addChildren( Window:new( 80, 50 ), "ballPars" )
+  local ballParsWindow = self.window:addChildren( Window:new( 100, 50 ), "ballPars" )
 
   ballParsWindow:addChildren( Icon:new(5, 5, "assets/crossed_swords.png") )
   ballParsWindow:addChildren( DynamicLabel:new( 25, 5, 10, function() return state.snowman.weapons[1].pars.dmg end, "ballPowerDynamicLabel" ) )
-  ballParsWindow:addChildren( DynamicLabel:new( 40, 5, 10, function() return math.floor(state.snowman.weapons[1].pars.speed / 100) end, "ballSpeedDynamicLabel" ) )
-  ballParsWindow:addChildren( DynamicLabel:new( 25, 25, 10, function() return state.snowman.weapons[1].pars.lifeTime end, "ballLifeTimeDynamicLabel" ) )
-  ballParsWindow:addChildren( DynamicLabel:new( 40, 25, 10, function() return state.snowman.weapons[1].pars.reload end, "ballReloadDynamicLabel" ) )
 
-  local playerStatsWindow = self.window:addChildren( Window:new( 85, 50, 80 ), "playerStats" )
+  --ballParsWindow:addChildren( Icon:new(5, 5, "assets/crossed_swords.png") )
+  --ballParsWindow:addChildren( DynamicLabel:new( 70, 5, 10, function() return math.floor(state.snowman.weapons[1].pars.speed / 100) end, "ballSpeedDynamicLabel" ) )
+
+  --ballParsWindow:addChildren( Icon:new(5, 5, "assets/crossed_swords.png") )
+  --ballParsWindow:addChildren( DynamicLabel:new( 25, 25, 10, function() return state.snowman.weapons[1].pars.lifeTime end, "ballLifeTimeDynamicLabel" ) )
+
+  --ballParsWindow:addChildren( Icon:new(5, 5, "assets/crossed_swords.png") )
+  --ballParsWindow:addChildren( DynamicLabel:new( 70, 25, 10, function() return state.snowman.weapons[1].pars.reload end, "ballReloadDynamicLabel" ) )
+
+  local playerStatsWindow = self.window:addChildren( Window:new( 50, 50, 100 ), "playerStats" )
   
   playerStatsWindow:addChildren( Icon:new( 5, 5, "assets/heart.png" ) )
   playerStatsWindow:addChildren( DynamicLabel:new( 25, 5, 10, function() return state.snowman.health end ) )

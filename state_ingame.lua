@@ -81,7 +81,6 @@ function InGameState:reset()
   
   self.deck = CardDeck:new()
   self.cards = self.deck:drawCards(2)
-  table.insert( self.cards, Card:new("snowballMg") )
 
   self.rules = Rules:new()
 
@@ -91,10 +90,15 @@ function InGameState:reset()
   self.survivedRounds = 0
 
   self.kingChamps = false
+  
+  self.won = nil
 end
 
-function InGameState:gameOver(lost)
-  error("Do something")
+function InGameState:gameOver(won)
+  self.won = won
+  
+  gameStateManager:changeState(GameOverState)
+  
 end
 
 function InGameState:update(dt)
@@ -121,8 +125,6 @@ function InGameState:update(dt)
     self.rules:onRoundExit()
 
     if self.rules:checkGoals() then
-      print("won")
-      -- yippeea won!
       self:gameOver(true)
     else
       self.snowman.x = 220
@@ -166,6 +168,12 @@ function InGameState:mousereleased(x, y, button)
 end
 
 function InGameState:keypressed(key)
+	if debug.cheats and key == "u" then
+		self:gameOver(false)
+	elseif debug.cheats and key == "i" then
+		self:gameOver(true)
+	end
+
   if self.roundState == InGameState.ROUND_BEGIN_PLAY then
     self.gui:keypressed(key)
     -- no player movement
