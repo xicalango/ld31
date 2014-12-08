@@ -108,7 +108,9 @@ end
 
 function Entity:onHit(shot)
   self.hitEffectTime = .5  
-  hitSound:play()
+  if not global.soundMute then
+    hitSound:play()
+  end
 end
 
 function Entity:die()

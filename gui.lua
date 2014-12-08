@@ -236,8 +236,10 @@ function CardView:keypressed(key)
       if self.selection < self.offset then
         self.offset = self.selection
       end
-
-	  self.menuSelectionSound:play()
+	  
+      if not global.soundMute then
+	    self.menuSelectionSound:play()
+	  end
 	  
     elseif key == keyconfig.player.down or key == keyconfig.player.sdown then -- down
       self.selection = self.selection + 1
@@ -251,20 +253,28 @@ function CardView:keypressed(key)
         self.offset = self.selection - self.numCards
       end
 
-	  self.menuSelectionSound:play()
+      if not global.soundMute then
+        self.menuSelectionSound:play()
+	  end
 
     elseif key == keyconfig.player.select then -- select
       if self.selectedItems[self.selection] then
         self.selectedItems[self.selection] = nil
         self.selectedItemsCount = self.selectedItemsCount - 1
-		self.itemDeselectedSound:play()
+        if not global.soundMute then
+	  	  self.itemDeselectedSound:play()
+		end
       else
         if self.selectedItemsCount == self.num then
-          self.notPossibleSound:play()
+          if not global.soundMute then
+            self.notPossibleSound:play()
+		  end
         else
           self.selectedItems[self.selection] = true
           self.selectedItemsCount = self.selectedItemsCount + 1
-		  self.itemSelectedSound:play()
+		  if not global.soundMute then
+            self.itemSelectedSound:play()
+		  end
         end
       end
     end

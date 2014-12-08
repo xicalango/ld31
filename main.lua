@@ -32,12 +32,14 @@ require("state_gameover")
 
 debug = {
   drawHitboxes = false,
-  cheats = true
+  cheats = false
 }
 
 global = {
   takeScreenshot = false,
-  fullscreen = false
+  fullscreen = false,
+  musicMute = false,
+  soundMute = false
 }
 
 
@@ -91,7 +93,19 @@ function love.update(dt)
 end
 
 function love.keypressed(key)
-  if key == "f12" then
+  if key == "m" then
+    global.musicMute = not global.musicMute
+	if global.musicMute then
+		thinkMusic:setVolume(0)
+		fightMusic:setVolume(0)
+	else
+		thinkMusic:setVolume(1)
+		fightMusic:setVolume(1)
+	end
+  elseif key == "n" then
+    global.soundMute = not global.soundMute
+	
+  elseif key == "f12" then
     global.takeScreenshot = true
     elseif key == "f5" then
       if love.window.setFullscreen(not global.fullscreen, "desktop") then

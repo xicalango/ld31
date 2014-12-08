@@ -90,7 +90,9 @@ function Mob:update(dt)
       end
     end
 	
-	enemyShootSound:play()
+	if not global.soundMute then
+		enemyShootSound:play()
+	end
 
   end
 

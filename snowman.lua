@@ -51,8 +51,9 @@ function Snowman:update(dt)
         else
           state:shoot( self, w.pars, sx, sy )
         end
-		
-		shootSound:play()
+		if not global.soundMute then
+		  shootSound:play()
+		end
 
         w.reloadTimer = w.pars.reload
       end
