@@ -185,6 +185,10 @@ function CardView:draw(ox, oy)
           desc = desc .. "One time action: "
         elseif c.cardSpec.category == "goal" then
           desc = desc .. "New goal: "
+		elseif c.cardSpec.category == "modifier" then
+		  desc = desc .. "Next round only: "
+		elseif c.cardSpec.category == "weapon" then
+		  desc = desc .. "New weapon: " .. c.cardSpec.name .. "; "
         end
 
         desc = desc .. c.cardSpec.desc

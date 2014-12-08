@@ -152,9 +152,9 @@ function cardspecs.goalEndurance:extraText(card, state)
   return tostring(card.finishedRounds) .. " / " .. tostring(cardspecs.goalEndurance.NUM_ROUNDS)
 end
 
-cardspecs.goalMassacre = CardSpec:new( "Massacre", "goal", "Kill 50 enemys since the beginning of time", love.graphics.newImage("assets/massacre.png"), { count = 7 } )
+cardspecs.goalMassacre = CardSpec:new( "Massacre", "goal", "Kill 25 enemys since the beginning of time", love.graphics.newImage("assets/massacre.png"), { count = 7 } )
 
-cardspecs.goalMassacre.NUM_KILLS = 50
+cardspecs.goalMassacre.NUM_KILLS = 25
 
 function cardspecs.goalMassacre:checkGoalCondition(card, state)
   return state.killedMobs >= cardspecs.goalMassacre.NUM_KILLS
@@ -164,8 +164,8 @@ function cardspecs.goalMassacre:extraText(card, state)
   return tostring(state.killedMobs) .. " / " .. tostring(cardspecs.goalMassacre.NUM_KILLS)
 end
 
-cardspecs.goalCollateralDamage = CardSpec:new( "Collateral Damage", "goal", "Kill 25 pawns after this card was layed out", love.graphics.newImage("assets/collateralDamage.png"), {count = 7}  )
-cardspecs.goalCollateralDamage.NUM_PAWNS = 25
+cardspecs.goalCollateralDamage = CardSpec:new( "Collateral Damage", "goal", "Kill 15 pawns after this card was layed out", love.graphics.newImage("assets/collateralDamage.png"), {count = 7}  )
+cardspecs.goalCollateralDamage.NUM_PAWNS = 15
 
 function cardspecs.goalCollateralDamage:onActivation(card, state)
   card.killedPawns = 0

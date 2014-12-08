@@ -73,8 +73,9 @@ end
 
 mobs.tower = MobSpec:new( "tower", 0, 3 )
 
-mobs.tower.updateFn = shootCooldown( {1, 3}, .5, {3,3} )
+mobs.tower.updateFn = shootCooldown( {1.5, 3}, .5, {3,3} )
 mobs.tower.ballpars = BallParameters:new(true)
+mobs.tower.ballpars.lifeTime = .7
 mobs.tower.ballpars.chasing = true
 
 function mobs.tower:setup(mob)
@@ -88,7 +89,6 @@ end
 
 mobs.king = MobSpec:new( "king", 150, 2 )
 mobs.king.updateFn = shootCooldownChase( {.5, 2}, .4, {3, 5}, .5 )
-mobs.king.touchDamage = 1
 mobs.king.ballpars = BallParameters:new(true)
 mobs.king.ballpars.pattern = function(mob, state)
   local phi
@@ -132,7 +132,6 @@ end
 
 mobs.queen = MobSpec:new( "queen", 200, 3 )
 mobs.queen.updateFn = shootCooldownChase( {.5,2}, .4, {3, 4}, .5 )
-mobs.queen.touchDamage = 1
 mobs.queen.ballpars = BallParameters:new(true)
 mobs.queen.ballpars.pattern = function(mob, state)
   local phi
@@ -151,6 +150,7 @@ function mobs.queen:update(mob, dt)
 end
 
 mobs.bishop = MobSpec:new( "bishop", 75, 3 )
+mobs.bishop.touchDamage = .5
 mobs.bishop.ballpars = BallParameters:new(true)
 
 function mobs.bishop:setup(mob)
@@ -174,6 +174,7 @@ function mobs.bishop:update(mob, dt)
 end
 
 mobs.knight = MobSpec:new( "knight", 125, 2 )
+mobs.knight.touchDamage = .5
 
 function mobs.knight:setup(mob)
   mob.state = "chase"

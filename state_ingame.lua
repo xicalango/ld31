@@ -185,11 +185,12 @@ function InGameState:draw()
     end)
 
   elseif self.roundState == InGameState.ROUND_ROUND and self.world:mobCount() == 0 then
-    love.graphics.setFont( self.bigFont )
     withColor( {0, 0, 0, 255}, function()
-      love.graphics.print( "Round " .. tostring(self.survivedRounds + 1) .. " completed" , 200, 400 )
+		love.graphics.setFont( self.bigFont )
+		love.graphics.print( "Round " .. tostring(self.survivedRounds + 1) .. " completed" , 200, 400 )
+		love.graphics.setFont( self.normalFont ) 
+		love.graphics.print( "Press [return] to continue." , 200, 450 )
     end)
-    love.graphics.setFont( self.normalFont ) 
   end
 end
 

@@ -16,7 +16,7 @@ function MobSpec:initialize( name, speed, health )
   self.name = name
   self.speed = speed
   self.health = health
-  self.touchDamage = 1
+  self.touchDamage = .5
   self.defaultTint = {0, 0, 0, 255}
   self.size = 1
 end
